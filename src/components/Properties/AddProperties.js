@@ -1,7 +1,7 @@
 function AddProperties() {
     return (
         <div>
-    'oi'
+    'oi2'
         </div>
     )
 }
