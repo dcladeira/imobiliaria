@@ -6,6 +6,7 @@ import {
   ButtonGroup,
   ToggleButton,
   InputGroup,
+  Button,
 } from "react-bootstrap";
 import "./HomePageHeader.css";
 import axios from "axios";
@@ -13,11 +14,17 @@ import axios from "axios";
 function HomePageHeader({ apiUrl }) {
   const [cities, setCities] = useState([]);
   const [states, setStates] = useState([]);
-  const [radioValue, setRadioValue] = useState("venda");
-  const [numberOfRooms, setNumberOfRooms] = useState("1");
-  const [numberOfBathrooms, setNumberOfBathrooms] = useState("1");
-  const [minValue, setMinValue] = useState(0);
-  const [maxValue, setMaxValue] = useState();
+
+
+  const [filter,setFilter] = useState({
+    city: '',
+    state: '',
+    transactionValue: 'venda',
+    numberOfRooms:'1',
+    numberOfBathrooms: '1',
+    minValue: '0',
+    maxValue: '',
+  })
 
   useEffect(() => {
     try {
@@ -28,6 +35,8 @@ function HomePageHeader({ apiUrl }) {
           console.log(property.city);
           if (cities.indexOf(property.city) < 0)
             setCities([...cities, property.city]);
+            if (states.indexOf(property.state) < 0)
+            setStates([...states, property.state]);
           console.log(cities);
         });
       };
@@ -35,25 +44,26 @@ function HomePageHeader({ apiUrl }) {
     } catch (e) {
       console.log(e);
     }
-  }, [cities, apiUrl]);
+  }, [cities,states, apiUrl]);
 
-  useEffect(() => {
-    try {
-      const fetchStates = async () => {
-        const response = await axios.get(apiUrl);
-        console.log(response.data);
-        response.data.map((property) => {
-          console.log(property.state);
-          if (states.indexOf(property.state) < 0)
-            setStates([...states, property.state]);
-          console.log(states);
-        });
-      };
-      fetchStates();
-    } catch (e) {
-      console.log(e);
-    }
-  }, [states, apiUrl]);
+
+function handleChange(e) {
+    console.log(e.target.name, e.target.value)
+    setFilter({...filter, [e.target.name]: e.target.value})
+  }
+
+  function handleClear() {
+    setFilter({
+        city: '',
+        state: '',
+        transactionValue: 'venda',
+        numberOfRooms:'1',
+        numberOfBathrooms: '1',
+        minValue: '0',
+        maxValue: '',
+      }
+    )
+  }
 
   return (
     <div className="hp-bg d-flex flex-column justify-content-center align-items-center">
@@ -63,37 +73,41 @@ function HomePageHeader({ apiUrl }) {
       </section>
 
       <section className="filter-container">
+        <div className="d-flex justify-content-between">
         <ButtonGroup className="mb-3 transaction-btn">
           <ToggleButton
             type="radio"
             id="radio-venda"
             for="radio-venda"
             variant="outline-primary"
-            name="room"
-            value="venda"
-            checked={radioValue === "venda"}
-            onChange={(e) => setRadioValue(e.currentTarget.value)}
+            name="transactionValue"
+            value='venda'
+            checked={filter.transactionValue === "venda"}
+            onChange={handleChange}
           >
-            Venda
+            VENDA
           </ToggleButton>
           <ToggleButton
             type="radio"
             id="radio-aluguel"
             for="radio-aluguel"
             variant="outline-primary"
-            name="room"
+            name="transactionValue"
             value="aluguel"
-            checked={radioValue === "aluguel"}
-            onChange={(e) => setRadioValue(e.currentTarget.value)}
+            checked={filter.transactionValue === "aluguel"}
+            onChange={handleChange}
           >
-            Aluguel
+            ALUGUEL
           </ToggleButton>
         </ButtonGroup>
+        
+        <Button onClick={handleClear} className='clear-filter mb-3' variant="outline-primary">LIMPAR FILTROS</Button>
 
+        </div>
         <Form>
           <Row>
             <Col>
-              <Form.Select
+              <Form.Select onChange={handleChange} value={filter.type} name='type'
                 className="select-filter"
                 size="lg"
                 aria-label="Default select example"
@@ -105,7 +119,7 @@ function HomePageHeader({ apiUrl }) {
               </Form.Select>
             </Col>
             <Col>
-              <Form.Select
+              <Form.Select onChange={handleChange} value={filter.state} name='state'
                 className="select-filter"
                 size="lg"
                 aria-label="Default select example"
@@ -122,7 +136,7 @@ function HomePageHeader({ apiUrl }) {
               </Form.Select>
             </Col>
             <Col>
-              <Form.Select
+              <Form.Select onChange={handleChange} value={filter.city} name='city'
                 className="select-filter"
                 size="lg"
                 aria-label="Default select example"
@@ -147,9 +161,9 @@ function HomePageHeader({ apiUrl }) {
                 <InputGroup.Text>$</InputGroup.Text>
                 <Form.Control
                   id="min-value"
-                  name="min-value"
-                  value={minValue}
-                  onChange={(e) => setMinValue(e.target.value)}
+                  name="minValue"
+                  value={filter.minValue}
+                  onChange={handleChange}
                   aria-label="Amount (to the nearest dollar)"
                 />
                 <InputGroup.Text>.00</InputGroup.Text>
@@ -161,10 +175,10 @@ function HomePageHeader({ apiUrl }) {
                 <InputGroup.Text>$</InputGroup.Text>
                 <Form.Control
                   id="max-value"
-                  name="max-value"
+                  name="maxValue"
                   type="number"
-                  value={maxValue}
-                  onChange={(e) => setMaxValue(e.target.value)}
+                  value={filter.maxValue}
+                  onChange={handleChange}
                   aria-label="Amount (to the nearest dollar)"
                 />
                 <InputGroup.Text>.00</InputGroup.Text>
@@ -180,10 +194,10 @@ function HomePageHeader({ apiUrl }) {
                   id="radio-1-room"
                   for="radio-1-room"
                   variant="outline-primary"
-                  name="room"
+                  name="numberOfRooms"
                   value="1"
-                  checked={numberOfRooms === "1"}
-                  onChange={(e) => setNumberOfRooms(e.currentTarget.value)}
+                  checked={filter.numberOfRooms === "1"}
+                  onChange={handleChange}
                 >
                   1
                 </ToggleButton>
@@ -192,10 +206,10 @@ function HomePageHeader({ apiUrl }) {
                   id="radio-2-rooms"
                   for="radio-2-rooms"
                   variant="outline-primary"
-                  name="room"
+                  name="numberOfRooms"
                   value="2"
-                  checked={numberOfRooms === "2"}
-                  onChange={(e) => setNumberOfRooms(e.currentTarget.value)}
+                  checked={filter.numberOfRooms === "2"}
+                  onChange={handleChange}
                 >
                   2
                 </ToggleButton>
@@ -204,10 +218,10 @@ function HomePageHeader({ apiUrl }) {
                   id="radio-3-rooms"
                   for="radio-3-rooms"
                   variant="outline-primary"
-                  name="room"
+                  name="numberOfRooms"
                   value="3"
-                  checked={numberOfRooms === "3"}
-                  onChange={(e) => setNumberOfRooms(e.currentTarget.value)}
+                  checked={filter.numberOfRooms === "3"}
+                  onChange={handleChange}
                 >
                   3
                 </ToggleButton>
@@ -216,10 +230,10 @@ function HomePageHeader({ apiUrl }) {
                   id="radio-4-rooms"
                   for="radio-4-rooms"
                   variant="outline-primary"
-                  name="room"
+                  name="numberOfRooms"
                   value="4"
-                  checked={numberOfRooms === "4"}
-                  onChange={(e) => setNumberOfRooms(e.currentTarget.value)}
+                  checked={filter.numberOfRooms === "4"}
+                  onChange={handleChange}
                 >
                   4 +
                 </ToggleButton>
@@ -235,10 +249,10 @@ function HomePageHeader({ apiUrl }) {
                   id="radio-1-bathroom"
                   for="radio-1-bathroom"
                   variant="outline-primary"
-                  name="bathroom"
+                  name="numberOfBathrooms"
                   value="1"
-                  checked={numberOfBathrooms === "1"}
-                  onChange={(e) => setNumberOfBathrooms(e.currentTarget.value)}
+                  checked={filter.numberOfBathrooms === "1"}
+                  onChange={handleChange}
                 >
                   1
                 </ToggleButton>
@@ -247,10 +261,10 @@ function HomePageHeader({ apiUrl }) {
                   id="radio-2-bathrooms"
                   for="radio-2-bathrooms"
                   variant="outline-primary"
-                  name="bathrooms"
+                  name="numberOfBathrooms"
                   value="2"
-                  checked={numberOfBathrooms === "2"}
-                  onChange={(e) => setNumberOfBathrooms(e.currentTarget.value)}
+                  checked={filter.numberOfBathrooms === "2"}
+                  onChange={handleChange}
                 >
                   2
                 </ToggleButton>
@@ -259,10 +273,10 @@ function HomePageHeader({ apiUrl }) {
                   id="radio-3-bathrooms"
                   for="radio-3-bathrooms"
                   variant="outline-primary"
-                  name="bathrooms"
+                  name="numberOfBathrooms"
                   value="3"
-                  checked={numberOfBathrooms === "3"}
-                  onChange={(e) => setNumberOfBathrooms(e.currentTarget.value)}
+                  checked={filter.numberOfBathrooms === "3"}
+                  onChange={handleChange}
                 >
                   3
                 </ToggleButton>
@@ -271,10 +285,10 @@ function HomePageHeader({ apiUrl }) {
                   id="radio-4-bathrooms"
                   for="radio-4-bathrooms"
                   variant="outline-primary"
-                  name="bathrooms"
+                  name="numberOfBathrooms"
                   value="4"
-                  checked={numberOfBathrooms === "4"}
-                  onChange={(e) => setNumberOfBathrooms(e.currentTarget.value)}
+                  checked={filter.numberOfBathrooms === "4"}
+                  onChange={handleChange}
                 >
                   4 +
                 </ToggleButton>
