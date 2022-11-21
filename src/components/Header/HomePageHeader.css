@@ -1,0 +1,31 @@
+.hp-bg {
+    background-image: url("../../images/home-page.png");
+    background-size: cover;
+    height: 50rem;
+    color:white;
+}
+
+h1 {font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    text-decoration:underline;
+    font-size: 6rem;
+}
+
+h2 {
+    font-size: 2.5rem;
+}
+
+.filter-container {
+    width: 100%;
+}
+
+.select-filter {
+    font-size:1.8rem;
+}
+
+option {
+    font-size:1.5rem;
+}
+
+.transaction-btn label {
+    font-size: 1.4rem;
+}

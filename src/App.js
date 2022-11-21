@@ -19,9 +19,11 @@ function App() {
       <NavigationBar isAdmin={isAdmin} setShowLogin={setShowLogin}/>
       <LoginModal  showLogin={showLogin} setShowLogin={setShowLogin} isAdmin={isAdmin} setIsAdmin={setIsAdmin}/>
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<HomePage apiUrl={apiUrl}/>} />
         <Route path="/properties" element={<Properties apiUrl={apiUrl}/>} />
-        <Route path="/add-propertie" element={<AddProperties apiUrl={apiUrl}/>} />
+        <Route path="/add-properties" element={<AddProperties apiUrl={apiUrl}/>} />
+        <Route path="/add-properties" element={<AddProperties apiUrl={apiUrl}/>} />
+        <Route path="/add-properties" element={<AddProperties apiUrl={apiUrl}/>} />
       </Routes>
     </div>
   );

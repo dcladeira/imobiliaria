@@ -1,7 +1,13 @@
 import React, { useState } from "react";
+import HomePageHeader from "../components/Header/HomePageHeader";
 
-function HomePage({ setIsAdmin, showLogin, setShowLogin }) {
-  return <div></div>;
+function HomePage({ apiUrl, setIsAdmin, showLogin, setShowLogin }) {
+  return <div>
+
+    <HomePageHeader apiUrl={apiUrl}/>
+
+
+  </div>;
 }
 
 export default HomePage;
