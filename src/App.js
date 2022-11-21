@@ -1,14 +1,28 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { Route, Routes } from 'react-router-dom';
-import './App.css';
-import Properties from './pages/Properties';
+import "bootstrap/dist/css/bootstrap.min.css";
+import { useState } from "react";
+import { Route, Routes } from "react-router-dom";
+import "./App.css";
+import LoginModal from "./components/Modal/LoginModal";
+import NavigationBar from "./components/NavigationBar/NavigationBar";
+import AddProperties from "./components/Properties/AddProperties";
+import Properties from "./components/Properties/PropertiesList";
+import HomePage from "./pages/HomePage";
 
 function App() {
+  const apiUrl = "https://ironrest.cyclic.app/properties/";
+  const [isAdmin,setIsAdmin] = useState(false)
+  const [showLogin, setShowLogin] = useState(false);
+
+
   return (
     <div className="App">
-     <Route>
-      <Routes path='/' element = { <Properties /> } />
-     </Route>
+      <NavigationBar isAdmin={isAdmin} setShowLogin={setShowLogin}/>
+      <LoginModal  showLogin={showLogin} setShowLogin={setShowLogin} isAdmin={isAdmin} setIsAdmin={setIsAdmin}/>
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/properties" element={<Properties apiUrl={apiUrl}/>} />
+        <Route path="/add-propertie" element={<AddProperties apiUrl={apiUrl}/>} />
+      </Routes>
     </div>
   );
 }
