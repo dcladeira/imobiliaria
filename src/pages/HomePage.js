@@ -7,7 +7,7 @@ function HomePage({ apiUrl, setIsAdmin, showLogin, setShowLogin }) {
 const [filter, setFilter] = useState({
         city: "",
         state: "",
-        transactionValue: "venda",
+        transaction: "venda",
         numberOfRooms: "",
         numberOfBathrooms: "",
         minValue: "0",

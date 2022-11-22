@@ -19,14 +19,11 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
     try {
       const fetchCities = async () => {
         const response = await axios.get(apiUrl);
-        console.log(response.data);
         response.data.forEach((property) => {
-          console.log(property.city);
           if (cities.indexOf(property.city) < 0)
             setCities([...cities, property.city]);
           if (states.indexOf(property.state) < 0)
             setStates([...states, property.state]);
-          console.log(cities);
         });
       };
       fetchCities();
@@ -36,9 +33,7 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
   }, [cities, states, apiUrl]);
 
   function handleChange(e) {
-    console.log(e.target.type, e.target.name, e.target.checked);
     if (e.target.type === 'checkbox') {
-        console.log('oi')
         setFilter({ ...filter, amenities: {...filter.amenities,[e.target.name]: e.target.checked }});
     }
     else {setFilter({ ...filter, [e.target.name]: e.target.value });}
@@ -49,7 +44,7 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
     setFilter({
       city: "",
       state: "",
-      transactionValue: "venda",
+      transaction: "venda",
       numberOfRooms: "1",
       numberOfBathrooms: "1",
       minValue: "0",
@@ -72,9 +67,9 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
               id="radio-venda"
               htmlFor="radio-venda"
               variant="outline-primary"
-              name="transactionValue"
+              name="transaction"
               value="venda"
-              checked={filter.transactionValue === "venda"}
+              checked={filter.transaction === "venda"}
               onChange={handleChange}
             >
               VENDA
@@ -84,9 +79,9 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
               id="radio-aluguel"
               htmlFor="radio-aluguel"
               variant="outline-primary"
-              name="transactionValue"
+              name="transaction"
               value="aluguel"
-              checked={filter.transactionValue === "aluguel"}
+              checked={filter.transaction === "aluguel"}
               onChange={handleChange}
             >
               ALUGUEL

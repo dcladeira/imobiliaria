@@ -5,30 +5,30 @@ import './PropertiesList.css'
 
 function Properties({ apiUrl, filter, setFilter }) {
   const [properties, setProperties] = useState([]);
-  const [propertiesFiltered, setPropertiesFiltered] = useState([]);
 
+  const propertiesFiltered = properties.filter(property =>{
+    console.log(filter.transaction);
+    console.log(property.transaction);
 
-  
-  setPropertiesFiltered([...properties].filter(property =>{
-    console.log()
     
-    if(property.city == filter.city ||
-    property.state==filter.state ||
-    property.transactionValue== filter.transactionValue ||
-    property.numberOfRooms==filter.numberOfRooms ||
-    property.numberOfBathrooms==filter.numberOfBathrooms ||
-    property.minValue== filter.minValue ||
-    property.maxValue==filter.maxValue ||
-    property.amenities.swimming == filter.amenities.swimming ||
-    property.amenities.concierge == filter.amenities.concierge ||
-    property.amenities.gourmet == filter.amenities.gourmet ||
-    property.amenities.parking == filter.amenities.parking) {
+    if((property.city === filter.city || filter.city === 'Cidade' ) &&
+    (property.state===filter.state || filter.state === 'Estado') &&
+    (property.transaction.toLowerCase() === filter.transaction.toLowerCase() || filter.transaction === '')
+    // property.numberOfRooms===filter.numberOfRooms ||
+    // property.numberOfBathrooms===filter.numberOfBathrooms ||
+    // (property.price >= filter.minValue ||
+    //     property.price <= filter.maxValue) ||
+    // property.amenities.swimming === filter.amenities.swimming === true ||
+    // property.amenities.concierge === filter.amenities.concierge === true ||
+    // property.amenities.gourmet === filter.amenities.gourmet === true ||
+    // property.amenities.parking === filter.amenities.parking === true
+    ) {
         return true
     } else {
     return false}
-    
+  })
 
-  }))
+  console.log(propertiesFiltered)
 
   useEffect(() => {
     try {
