@@ -3,13 +3,35 @@ import { Button, Modal, Form, Row, Col, Stack } from "react-bootstrap";
 import { useState } from "react";
 import axios from "axios";
 
-function AddProperties({ apiURL, body, setBody }) {
+function AddProperties({ apiUrl }) {
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const navigate = useNavigate();
   const types = ["Casa", "Apartamento", "Terreno"];
   const transactions = ["Venda", "Aluguel"];
+  const [body, setBody] = useState({
+    code: "",
+    title: "",
+    description: "",
+    type: "",
+    transaction: "",
+    state: "",
+    city: "",
+    neighborhood: "",
+    address: "",
+    area: 0,
+    bedrooms: 0,
+    bathrooms: 0,
+    price: 0,
+    amenities: {
+      swimming: false,
+      concierge: false,
+      gourmet: false,
+      parking: false,
+    },
+    photos: [],
+  });
 
   const handleChange = (e) => {
     if (e.target.name.slice(0, 8) === "checkbox") {
@@ -28,7 +50,7 @@ function AddProperties({ apiURL, body, setBody }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(apiURL, body);
+      await axios.post(apiUrl, body);
       handleClose();
       navigate("/");
     } catch (error) {
@@ -42,7 +64,7 @@ function AddProperties({ apiURL, body, setBody }) {
         Cadastrar imóvel
       </Button>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal key={body._id} show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Cadastrar imóvel</Modal.Title>
         </Modal.Header>
