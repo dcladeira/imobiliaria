@@ -8,8 +8,8 @@ const [filter, setFilter] = useState({
         city: "",
         state: "",
         transaction: "venda",
-        numberOfRooms: "",
-        numberOfBathrooms: "",
+        bedrooms: "",
+        bathrooms: "",
         minValue: "0",
         maxValue: "",
         amenities:{

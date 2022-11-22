@@ -45,10 +45,11 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
       city: "",
       state: "",
       transaction: "venda",
-      numberOfRooms: "1",
-      numberOfBathrooms: "1",
+      bedrooms: "",
+      bathrooms: "",
       minValue: "0",
       maxValue: "",
+
     });
   }
 
@@ -107,7 +108,7 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
                 size="lg"
                 aria-label="Default select example"
               >
-                <option>Tipo de imóvel</option>
+                <option value=''>Tipo de imóvel</option>
                 <option value="casa">Casa</option>
                 <option value="apartamento">Apartamento</option>
                 <option value="terreno">Terreno</option>
@@ -122,7 +123,7 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
                 size="lg"
                 aria-label="Default select example"
               >
-                <option name="state">Estado</option>
+                <option name="state" value=''>Estado</option>
 
                 {states.map((state) => {
                   return (
@@ -142,7 +143,7 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
                 size="lg"
                 aria-label="Default select example"
               >
-                <option name="city">Cidade</option>
+                <option name="city" value=''>Cidade</option>
                 {cities.map((city) => {
                   return (
                     <option key={city} name="city" value={city}>
@@ -192,48 +193,48 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
               <ButtonGroup className="">
                 <ToggleButton
                   type="radio"
-                  id="radio-1-room"
-                  htmlFor="radio-1-room"
+                  id="radio-1-bedrooms"
+                  htmlFor="radio-1-bedrooms"
                   variant="outline-primary"
-                  name="numberOfRooms"
+                  name="bedrooms"
                   value="1"
-                  checked={filter.numberOfRooms === "1"}
+                  checked={filter.bedrooms === "1"}
                   onChange={handleChange}
                 >
                   1
                 </ToggleButton>
                 <ToggleButton
                   type="radio"
-                  id="radio-2-rooms"
-                  htmlFor="radio-2-rooms"
+                  id="radio-2-bedrooms"
+                  htmlFor="radio-2-bedrooms"
                   variant="outline-primary"
-                  name="numberOfRooms"
+                  name="bedrooms"
                   value="2"
-                  checked={filter.numberOfRooms === "2"}
+                  checked={filter.bedrooms === "2"}
                   onChange={handleChange}
                 >
                   2
                 </ToggleButton>
                 <ToggleButton
                   type="radio"
-                  id="radio-3-rooms"
-                  htmlFor="radio-3-rooms"
+                  id="radio-3-bedrooms"
+                  htmlFor="radio-3-bedrooms"
                   variant="outline-primary"
-                  name="numberOfRooms"
+                  name="bedrooms"
                   value="3"
-                  checked={filter.numberOfRooms === "3"}
+                  checked={filter.bedrooms === "3"}
                   onChange={handleChange}
                 >
                   3
                 </ToggleButton>
                 <ToggleButton
                   type="radio"
-                  id="radio-4-rooms"
-                  htmlFor="radio-4-rooms"
+                  id="radio-4-bedrooms"
+                  htmlFor="radio-4-bedrooms"
                   variant="outline-primary"
-                  name="numberOfRooms"
+                  name="bedrooms"
                   value="4"
-                  checked={filter.numberOfRooms === "4"}
+                  checked={filter.bedrooms === "4"}
                   onChange={handleChange}
                 >
                   4 +
@@ -250,9 +251,9 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
                   id="radio-1-bathroom"
                   htmlFor="radio-1-bathroom"
                   variant="outline-primary"
-                  name="numberOfBathrooms"
+                  name="bathrooms"
                   value="1"
-                  checked={filter.numberOfBathrooms === "1"}
+                  checked={filter.bathrooms === "1"}
                   onChange={handleChange}
                 >
                   1
@@ -262,9 +263,9 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
                   id="radio-2-bathrooms"
                   htmlFor="radio-2-bathrooms"
                   variant="outline-primary"
-                  name="numberOfBathrooms"
+                  name="bathrooms"
                   value="2"
-                  checked={filter.numberOfBathrooms === "2"}
+                  checked={filter.bathrooms === "2"}
                   onChange={handleChange}
                 >
                   2
@@ -274,9 +275,9 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
                   id="radio-3-bathrooms"
                   htmlFor="radio-3-bathrooms"
                   variant="outline-primary"
-                  name="numberOfBathrooms"
+                  name="bathrooms"
                   value="3"
-                  checked={filter.numberOfBathrooms === "3"}
+                  checked={filter.bathrooms === "3"}
                   onChange={handleChange}
                 >
                   3
@@ -286,9 +287,9 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
                   id="radio-4-bathrooms"
                   htmlFor="radio-4-bathrooms"
                   variant="outline-primary"
-                  name="numberOfBathrooms"
+                  name="bathrooms"
                   value="4"
-                  checked={filter.numberOfBathrooms === "4"}
+                  checked={filter.bathrooms === "4"}
                   onChange={handleChange}
                 >
                   4 +

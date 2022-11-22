@@ -3,19 +3,18 @@ import { useEffect, useState } from "react";
 import { Card, ListGroup } from "react-bootstrap";
 import './PropertiesList.css'
 
-function Properties({ apiUrl, filter, setFilter }) {
+function Properties({ apiUrl, filter }) {
   const [properties, setProperties] = useState([]);
 
   const propertiesFiltered = properties.filter(property =>{
-    console.log(filter.transaction);
-    console.log(property.transaction);
+    console.log(property.bathrooms,filter.bathrooms );
 
     
-    if((property.city === filter.city || filter.city === 'Cidade' ) &&
-    (property.state===filter.state || filter.state === 'Estado') &&
-    (property.transaction.toLowerCase() === filter.transaction.toLowerCase() || filter.transaction === '')
-    // property.numberOfRooms===filter.numberOfRooms ||
-    // property.numberOfBathrooms===filter.numberOfBathrooms ||
+    if((property.city === filter.city || filter.city === '' ) &&
+    (property.state===filter.state || filter.state === '') &&
+    (property.transaction.toLowerCase() === filter.transaction.toLowerCase() || filter.transaction === '') &&
+    (property.bathrooms==filter.bathrooms || (property.bathrooms>= 4 && filter.bathrooms == 4) || filter.bathrooms === '') &&
+    (property.bedrooms==filter.bedrooms || (property.bedrooms>= 4 && filter.bedrooms == 4) || filter.bedrooms === '')
     // (property.price >= filter.minValue ||
     //     property.price <= filter.maxValue) ||
     // property.amenities.swimming === filter.amenities.swimming === true ||
