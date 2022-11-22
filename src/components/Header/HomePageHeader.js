@@ -11,31 +11,20 @@ import {
 import "./HomePageHeader.css";
 import axios from "axios";
 
-function HomePageHeader({ apiUrl }) {
+function HomePageHeader({ apiUrl, filter, setFilter }) {
   const [cities, setCities] = useState([]);
   const [states, setStates] = useState([]);
-
-
-  const [filter,setFilter] = useState({
-    city: '',
-    state: '',
-    transactionValue: 'venda',
-    numberOfRooms:'1',
-    numberOfBathrooms: '1',
-    minValue: '0',
-    maxValue: '',
-  })
 
   useEffect(() => {
     try {
       const fetchCities = async () => {
         const response = await axios.get(apiUrl);
         console.log(response.data);
-        response.data.map((property) => {
+        response.data.forEach((property) => {
           console.log(property.city);
           if (cities.indexOf(property.city) < 0)
             setCities([...cities, property.city]);
-            if (states.indexOf(property.state) < 0)
+          if (states.indexOf(property.state) < 0)
             setStates([...states, property.state]);
           console.log(cities);
         });
@@ -44,25 +33,28 @@ function HomePageHeader({ apiUrl }) {
     } catch (e) {
       console.log(e);
     }
-  }, [cities,states, apiUrl]);
+  }, [cities, states, apiUrl]);
 
-
-function handleChange(e) {
-    console.log(e.target.name, e.target.value)
-    setFilter({...filter, [e.target.name]: e.target.value})
+  function handleChange(e) {
+    console.log(e.target.type, e.target.name, e.target.checked);
+    if (e.target.type === 'checkbox') {
+        console.log('oi')
+        setFilter({ ...filter, amenities: {...filter.amenities,[e.target.name]: e.target.checked }});
+    }
+    else {setFilter({ ...filter, [e.target.name]: e.target.value });}
+    
   }
 
   function handleClear() {
     setFilter({
-        city: '',
-        state: '',
-        transactionValue: 'venda',
-        numberOfRooms:'1',
-        numberOfBathrooms: '1',
-        minValue: '0',
-        maxValue: '',
-      }
-    )
+      city: "",
+      state: "",
+      transactionValue: "venda",
+      numberOfRooms: "1",
+      numberOfBathrooms: "1",
+      minValue: "0",
+      maxValue: "",
+    });
   }
 
   return (
@@ -74,40 +66,48 @@ function handleChange(e) {
 
       <section className="filter-container">
         <div className="d-flex justify-content-between">
-        <ButtonGroup className="mb-3 transaction-btn">
-          <ToggleButton
-            type="radio"
-            id="radio-venda"
-            for="radio-venda"
-            variant="outline-primary"
-            name="transactionValue"
-            value='venda'
-            checked={filter.transactionValue === "venda"}
-            onChange={handleChange}
-          >
-            VENDA
-          </ToggleButton>
-          <ToggleButton
-            type="radio"
-            id="radio-aluguel"
-            for="radio-aluguel"
-            variant="outline-primary"
-            name="transactionValue"
-            value="aluguel"
-            checked={filter.transactionValue === "aluguel"}
-            onChange={handleChange}
-          >
-            ALUGUEL
-          </ToggleButton>
-        </ButtonGroup>
-        
-        <Button onClick={handleClear} className='clear-filter mb-3' variant="outline-primary">LIMPAR FILTROS</Button>
+          <ButtonGroup className="mb-3 transaction-btn">
+            <ToggleButton
+              type="radio"
+              id="radio-venda"
+              htmlFor="radio-venda"
+              variant="outline-primary"
+              name="transactionValue"
+              value="venda"
+              checked={filter.transactionValue === "venda"}
+              onChange={handleChange}
+            >
+              VENDA
+            </ToggleButton>
+            <ToggleButton
+              type="radio"
+              id="radio-aluguel"
+              htmlFor="radio-aluguel"
+              variant="outline-primary"
+              name="transactionValue"
+              value="aluguel"
+              checked={filter.transactionValue === "aluguel"}
+              onChange={handleChange}
+            >
+              ALUGUEL
+            </ToggleButton>
+          </ButtonGroup>
 
+          <Button
+            onClick={handleClear}
+            className="clear-filter mb-3"
+            variant="outline-primary"
+          >
+            LIMPAR FILTROS
+          </Button>
         </div>
         <Form>
           <Row>
             <Col>
-              <Form.Select onChange={handleChange} value={filter.type} name='type'
+              <Form.Select
+                onChange={handleChange}
+                value={filter.type}
+                name="type"
                 className="select-filter"
                 size="lg"
                 aria-label="Default select example"
@@ -119,7 +119,10 @@ function handleChange(e) {
               </Form.Select>
             </Col>
             <Col>
-              <Form.Select onChange={handleChange} value={filter.state} name='state'
+              <Form.Select
+                onChange={handleChange}
+                value={filter.state}
+                name="state"
                 className="select-filter"
                 size="lg"
                 aria-label="Default select example"
@@ -128,7 +131,7 @@ function handleChange(e) {
 
                 {states.map((state) => {
                   return (
-                    <option name="state" value={state}>
+                    <option key={state} name="state" value={state}>
                       {state}
                     </option>
                   );
@@ -136,7 +139,10 @@ function handleChange(e) {
               </Form.Select>
             </Col>
             <Col>
-              <Form.Select onChange={handleChange} value={filter.city} name='city'
+              <Form.Select
+                onChange={handleChange}
+                value={filter.city}
+                name="city"
                 className="select-filter"
                 size="lg"
                 aria-label="Default select example"
@@ -144,7 +150,7 @@ function handleChange(e) {
                 <option name="city">Cidade</option>
                 {cities.map((city) => {
                   return (
-                    <option name="city" value={city}>
+                    <option key={city} name="city" value={city}>
                       {city}
                     </option>
                   );
@@ -187,12 +193,12 @@ function handleChange(e) {
 
             {/* FILTRO DE QUARTOS */}
             <Col className="d-flex flex-column align-items-center">
-            <Form.Label>N° de quartos</Form.Label>
-              <ButtonGroup  className="">
+              <Form.Label>N° de quartos</Form.Label>
+              <ButtonGroup className="">
                 <ToggleButton
                   type="radio"
                   id="radio-1-room"
-                  for="radio-1-room"
+                  htmlFor="radio-1-room"
                   variant="outline-primary"
                   name="numberOfRooms"
                   value="1"
@@ -204,7 +210,7 @@ function handleChange(e) {
                 <ToggleButton
                   type="radio"
                   id="radio-2-rooms"
-                  for="radio-2-rooms"
+                  htmlFor="radio-2-rooms"
                   variant="outline-primary"
                   name="numberOfRooms"
                   value="2"
@@ -216,7 +222,7 @@ function handleChange(e) {
                 <ToggleButton
                   type="radio"
                   id="radio-3-rooms"
-                  for="radio-3-rooms"
+                  htmlFor="radio-3-rooms"
                   variant="outline-primary"
                   name="numberOfRooms"
                   value="3"
@@ -228,7 +234,7 @@ function handleChange(e) {
                 <ToggleButton
                   type="radio"
                   id="radio-4-rooms"
-                  for="radio-4-rooms"
+                  htmlFor="radio-4-rooms"
                   variant="outline-primary"
                   name="numberOfRooms"
                   value="4"
@@ -238,16 +244,16 @@ function handleChange(e) {
                   4 +
                 </ToggleButton>
               </ButtonGroup>
-</Col>
-              {/* FILTRO DE BANHEIROS */}
+            </Col>
+            {/* FILTRO DE BANHEIROS */}
 
-              <Col className="d-flex flex-column align-items-center">
-            <Form.Label>N° de banheiros</Form.Label>
-              <ButtonGroup  className="">
+            <Col className="d-flex flex-column align-items-center">
+              <Form.Label>N° de banheiros</Form.Label>
+              <ButtonGroup className="">
                 <ToggleButton
                   type="radio"
                   id="radio-1-bathroom"
-                  for="radio-1-bathroom"
+                  htmlFor="radio-1-bathroom"
                   variant="outline-primary"
                   name="numberOfBathrooms"
                   value="1"
@@ -259,7 +265,7 @@ function handleChange(e) {
                 <ToggleButton
                   type="radio"
                   id="radio-2-bathrooms"
-                  for="radio-2-bathrooms"
+                  htmlFor="radio-2-bathrooms"
                   variant="outline-primary"
                   name="numberOfBathrooms"
                   value="2"
@@ -271,7 +277,7 @@ function handleChange(e) {
                 <ToggleButton
                   type="radio"
                   id="radio-3-bathrooms"
-                  for="radio-3-bathrooms"
+                  htmlFor="radio-3-bathrooms"
                   variant="outline-primary"
                   name="numberOfBathrooms"
                   value="3"
@@ -283,7 +289,7 @@ function handleChange(e) {
                 <ToggleButton
                   type="radio"
                   id="radio-4-bathrooms"
-                  for="radio-4-bathrooms"
+                  htmlFor="radio-4-bathrooms"
                   variant="outline-primary"
                   name="numberOfBathrooms"
                   value="4"
@@ -293,10 +299,51 @@ function handleChange(e) {
                   4 +
                 </ToggleButton>
               </ButtonGroup>
-
-
             </Col>
           </Row>
+          <Row>
+            <Col>
+            <Form.Check
+              type="switch"
+              id="swimming"
+              name="swimming"
+              label="Piscina"
+              checked={filter.amenities.swimming}
+              onChange={handleChange}
+            />
+            </Col>
+            <Col>
+            <Form.Check
+              type="switch"
+              id="concierge"
+              name="concierge"
+              label="Concierge"
+              checked={filter.amenities.concierge}
+              onChange={handleChange}
+            />
+            </Col>
+          
+          <Col>
+          <Form.Check
+              type="switch"
+              id="gourmet"
+              name="gourmet"
+              label="Espaço Gourmet"
+              checked={filter.amenities.gourmet}
+              onChange={handleChange}
+            />
+          </Col>
+            <Col>
+            <Form.Check
+              type="switch"
+              id="parking"
+              name="parking"
+              label="Estacionamento"
+              checked={filter.amenities.parking}
+              onChange={handleChange}
+            />
+            </Col>
+            </Row>
         </Form>
       </section>
     </div>
