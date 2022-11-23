@@ -11,58 +11,55 @@ import {
 import "./HomePageHeader.css";
 import axios from "axios";
 
-function HomePageHeader({ apiUrl }) {
+function HomePageHeader({ apiUrl, filter, setFilter }) {
   const [cities, setCities] = useState([]);
   const [states, setStates] = useState([]);
-
-
-  const [filter,setFilter] = useState({
-    city: '',
-    state: '',
-    transactionValue: 'venda',
-    numberOfRooms:'1',
-    numberOfBathrooms: '1',
-    minValue: '0',
-    maxValue: '',
-  })
 
   useEffect(() => {
     try {
       const fetchCities = async () => {
         const response = await axios.get(apiUrl);
-        console.log(response.data);
-        response.data.map((property) => {
-          console.log(property.city);
+        response.data.forEach((property) => {
           if (cities.indexOf(property.city) < 0)
             setCities([...cities, property.city]);
-            if (states.indexOf(property.state) < 0)
+          if (states.indexOf(property.state) < 0)
             setStates([...states, property.state]);
-          console.log(cities);
         });
       };
       fetchCities();
     } catch (e) {
       console.log(e);
     }
-  }, [cities,states, apiUrl]);
+  }, [cities, states, apiUrl]);
 
-
-function handleChange(e) {
-    console.log(e.target.name, e.target.value)
-    setFilter({...filter, [e.target.name]: e.target.value})
+  function handleChange(e) {
+    if (e.target.type === "checkbox") {
+      setFilter({
+        ...filter,
+        amenities: { ...filter.amenities, [e.target.name]: e.target.checked },
+      });
+    } else {
+      setFilter({ ...filter, [e.target.name]: e.target.value });
+    }
   }
 
   function handleClear() {
     setFilter({
-        city: '',
-        state: '',
-        transactionValue: 'venda',
-        numberOfRooms:'1',
-        numberOfBathrooms: '1',
-        minValue: '0',
-        maxValue: '',
-      }
-    )
+      city: "",
+      state: "",
+      type: "",
+      transaction: "venda",
+      bedrooms: "",
+      bathrooms: "",
+      minValue: "0",
+      maxValue: "",
+      amenities: {
+        swimming: false,
+        concierge: false,
+        gourmet: false,
+        parking: false,
+      },
+    });
   }
 
   return (
@@ -74,61 +71,74 @@ function handleChange(e) {
 
       <section className="filter-container">
         <div className="d-flex justify-content-between">
-        <ButtonGroup className="mb-3 transaction-btn">
-          <ToggleButton
-            type="radio"
-            id="radio-venda"
-            for="radio-venda"
-            variant="outline-primary"
-            name="transactionValue"
-            value='venda'
-            checked={filter.transactionValue === "venda"}
-            onChange={handleChange}
-          >
-            VENDA
-          </ToggleButton>
-          <ToggleButton
-            type="radio"
-            id="radio-aluguel"
-            for="radio-aluguel"
-            variant="outline-primary"
-            name="transactionValue"
-            value="aluguel"
-            checked={filter.transactionValue === "aluguel"}
-            onChange={handleChange}
-          >
-            ALUGUEL
-          </ToggleButton>
-        </ButtonGroup>
-        
-        <Button onClick={handleClear} className='clear-filter mb-3' variant="outline-primary">LIMPAR FILTROS</Button>
+          <ButtonGroup className="mb-3 transaction-btn">
+            <ToggleButton
+              type="radio"
+              id="radio-venda"
+              htmlFor="radio-venda"
+              variant="outline-primary"
+              name="transaction"
+              value="venda"
+              checked={filter.transaction === "venda"}
+              onChange={handleChange}
+            >
+              VENDA
+            </ToggleButton>
+            <ToggleButton
+              type="radio"
+              id="radio-aluguel"
+              htmlFor="radio-aluguel"
+              variant="outline-primary"
+              name="transaction"
+              value="aluguel"
+              checked={filter.transaction === "aluguel"}
+              onChange={handleChange}
+            >
+              ALUGUEL
+            </ToggleButton>
+          </ButtonGroup>
 
+          <Button
+            onClick={handleClear}
+            className="clear-filter mb-3"
+            variant="outline-primary"
+          >
+            LIMPAR FILTROS
+          </Button>
         </div>
         <Form>
           <Row>
             <Col>
-              <Form.Select onChange={handleChange} value={filter.type} name='type'
+              <Form.Select
+                onChange={handleChange}
+                value={filter.type}
+                name="type"
                 className="select-filter"
                 size="lg"
                 aria-label="Default select example"
               >
-                <option>Tipo de imóvel</option>
+                <option value="">Tipo de imóvel</option>
                 <option value="casa">Casa</option>
                 <option value="apartamento">Apartamento</option>
                 <option value="terreno">Terreno</option>
               </Form.Select>
             </Col>
             <Col>
-              <Form.Select onChange={handleChange} value={filter.state} name='state'
+              <Form.Select
+                onChange={handleChange}
+                value={filter.state}
+                name="state"
                 className="select-filter"
                 size="lg"
                 aria-label="Default select example"
               >
-                <option name="state">Estado</option>
+                <option name="state" value="">
+                  Estado
+                </option>
 
                 {states.map((state) => {
                   return (
-                    <option name="state" value={state}>
+                    <option key={state} name="state" value={state}>
                       {state}
                     </option>
                   );
@@ -136,15 +146,20 @@ function handleChange(e) {
               </Form.Select>
             </Col>
             <Col>
-              <Form.Select onChange={handleChange} value={filter.city} name='city'
+              <Form.Select
+                onChange={handleChange}
+                value={filter.city}
+                name="city"
                 className="select-filter"
                 size="lg"
                 aria-label="Default select example"
               >
-                <option name="city">Cidade</option>
+                <option name="city" value="">
+                  Cidade
+                </option>
                 {cities.map((city) => {
                   return (
-                    <option name="city" value={city}>
+                    <option key={city} name="city" value={city}>
                       {city}
                     </option>
                   );
@@ -187,71 +202,71 @@ function handleChange(e) {
 
             {/* FILTRO DE QUARTOS */}
             <Col className="d-flex flex-column align-items-center">
-            <Form.Label>N° de quartos</Form.Label>
-              <ButtonGroup  className="">
+              <Form.Label>N° de quartos</Form.Label>
+              <ButtonGroup className="">
                 <ToggleButton
                   type="radio"
-                  id="radio-1-room"
-                  for="radio-1-room"
+                  id="radio-1-bedrooms"
+                  htmlFor="radio-1-bedrooms"
                   variant="outline-primary"
-                  name="numberOfRooms"
+                  name="bedrooms"
                   value="1"
-                  checked={filter.numberOfRooms === "1"}
+                  checked={filter.bedrooms === "1"}
                   onChange={handleChange}
                 >
                   1
                 </ToggleButton>
                 <ToggleButton
                   type="radio"
-                  id="radio-2-rooms"
-                  for="radio-2-rooms"
+                  id="radio-2-bedrooms"
+                  htmlFor="radio-2-bedrooms"
                   variant="outline-primary"
-                  name="numberOfRooms"
+                  name="bedrooms"
                   value="2"
-                  checked={filter.numberOfRooms === "2"}
+                  checked={filter.bedrooms === "2"}
                   onChange={handleChange}
                 >
                   2
                 </ToggleButton>
                 <ToggleButton
                   type="radio"
-                  id="radio-3-rooms"
-                  for="radio-3-rooms"
+                  id="radio-3-bedrooms"
+                  htmlFor="radio-3-bedrooms"
                   variant="outline-primary"
-                  name="numberOfRooms"
+                  name="bedrooms"
                   value="3"
-                  checked={filter.numberOfRooms === "3"}
+                  checked={filter.bedrooms === "3"}
                   onChange={handleChange}
                 >
                   3
                 </ToggleButton>
                 <ToggleButton
                   type="radio"
-                  id="radio-4-rooms"
-                  for="radio-4-rooms"
+                  id="radio-4-bedrooms"
+                  htmlFor="radio-4-bedrooms"
                   variant="outline-primary"
-                  name="numberOfRooms"
+                  name="bedrooms"
                   value="4"
-                  checked={filter.numberOfRooms === "4"}
+                  checked={filter.bedrooms === "4"}
                   onChange={handleChange}
                 >
                   4 +
                 </ToggleButton>
               </ButtonGroup>
-</Col>
-              {/* FILTRO DE BANHEIROS */}
+            </Col>
+            {/* FILTRO DE BANHEIROS */}
 
-              <Col className="d-flex flex-column align-items-center">
-            <Form.Label>N° de banheiros</Form.Label>
-              <ButtonGroup  className="">
+            <Col className="d-flex flex-column align-items-center">
+              <Form.Label>N° de banheiros</Form.Label>
+              <ButtonGroup className="">
                 <ToggleButton
                   type="radio"
                   id="radio-1-bathroom"
-                  for="radio-1-bathroom"
+                  htmlFor="radio-1-bathroom"
                   variant="outline-primary"
-                  name="numberOfBathrooms"
+                  name="bathrooms"
                   value="1"
-                  checked={filter.numberOfBathrooms === "1"}
+                  checked={filter.bathrooms === "1"}
                   onChange={handleChange}
                 >
                   1
@@ -259,11 +274,11 @@ function handleChange(e) {
                 <ToggleButton
                   type="radio"
                   id="radio-2-bathrooms"
-                  for="radio-2-bathrooms"
+                  htmlFor="radio-2-bathrooms"
                   variant="outline-primary"
-                  name="numberOfBathrooms"
+                  name="bathrooms"
                   value="2"
-                  checked={filter.numberOfBathrooms === "2"}
+                  checked={filter.bathrooms === "2"}
                   onChange={handleChange}
                 >
                   2
@@ -271,11 +286,11 @@ function handleChange(e) {
                 <ToggleButton
                   type="radio"
                   id="radio-3-bathrooms"
-                  for="radio-3-bathrooms"
+                  htmlFor="radio-3-bathrooms"
                   variant="outline-primary"
-                  name="numberOfBathrooms"
+                  name="bathrooms"
                   value="3"
-                  checked={filter.numberOfBathrooms === "3"}
+                  checked={filter.bathrooms === "3"}
                   onChange={handleChange}
                 >
                   3
@@ -283,18 +298,59 @@ function handleChange(e) {
                 <ToggleButton
                   type="radio"
                   id="radio-4-bathrooms"
-                  for="radio-4-bathrooms"
+                  htmlFor="radio-4-bathrooms"
                   variant="outline-primary"
-                  name="numberOfBathrooms"
+                  name="bathrooms"
                   value="4"
-                  checked={filter.numberOfBathrooms === "4"}
+                  checked={filter.bathrooms === "4"}
                   onChange={handleChange}
                 >
                   4 +
                 </ToggleButton>
               </ButtonGroup>
+            </Col>
+          </Row>
+          <Row>
+            <Col>
+              <Form.Check
+                type="switch"
+                id="swimming"
+                name="swimming"
+                label="Piscina"
+                checked={filter.amenities.swimming}
+                onChange={handleChange}
+              />
+            </Col>
+            <Col>
+              <Form.Check
+                type="switch"
+                id="concierge"
+                name="concierge"
+                label="Concierge"
+                checked={filter.amenities.concierge}
+                onChange={handleChange}
+              />
+            </Col>
 
-
+            <Col>
+              <Form.Check
+                type="switch"
+                id="gourmet"
+                name="gourmet"
+                label="Espaço Gourmet"
+                checked={filter.amenities.gourmet}
+                onChange={handleChange}
+              />
+            </Col>
+            <Col>
+              <Form.Check
+                type="switch"
+                id="parking"
+                name="parking"
+                label="Estacionamento"
+                checked={filter.amenities.parking}
+                onChange={handleChange}
+              />
             </Col>
           </Row>
         </Form>
