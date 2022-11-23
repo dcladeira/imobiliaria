@@ -120,7 +120,7 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
           </Button>
         </div>
         <Form>
-          <Row>
+          <Row className="mb-3">
             <Col>
               <Form.Select
                 onChange={handleChange}
@@ -184,7 +184,7 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
           <Row>
             {/* FILTRO DE VALOR */}
             <Col className="col-3">
-              <Form.Label htmlFor="min-value">Valor Mínimo</Form.Label>
+              <Form.Label htmlFor="min-value" className="d-flex align-items-center"><svg className="svg-inline--fa" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M345 39.1L472.8 168.4c52.4 53 52.4 138.2 0 191.2L360.8 472.9c-9.3 9.4-24.5 9.5-33.9 .2s-9.5-24.5-.2-33.9L438.6 325.9c33.9-34.3 33.9-89.4 0-123.7L310.9 72.9c-9.3-9.4-9.2-24.6 .2-33.9s24.6-9.2 33.9 .2zM0 229.5V80C0 53.5 21.5 32 48 32H197.5c17 0 33.3 6.7 45.3 18.7l168 168c25 25 25 65.5 0 90.5L277.3 442.7c-25 25-65.5 25-90.5 0l-168-168C6.7 262.7 0 246.5 0 229.5zM144 144c0-17.7-14.3-32-32-32s-32 14.3-32 32s14.3 32 32 32s32-14.3 32-32z"/></svg>Valor Mínimo</Form.Label>
               <InputGroup className="mb-3">
                 <InputGroup.Text>$</InputGroup.Text>
                 <Form.Control
@@ -198,7 +198,7 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
               </InputGroup>
             </Col>
             <Col className="col-3">
-              <Form.Label htmlFor="max-value">Valor Máximo</Form.Label>
+              <Form.Label htmlFor="max-value" className="d-flex align-items-center"><svg className="svg-inline--fa" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M345 39.1L472.8 168.4c52.4 53 52.4 138.2 0 191.2L360.8 472.9c-9.3 9.4-24.5 9.5-33.9 .2s-9.5-24.5-.2-33.9L438.6 325.9c33.9-34.3 33.9-89.4 0-123.7L310.9 72.9c-9.3-9.4-9.2-24.6 .2-33.9s24.6-9.2 33.9 .2zM0 229.5V80C0 53.5 21.5 32 48 32H197.5c17 0 33.3 6.7 45.3 18.7l168 168c25 25 25 65.5 0 90.5L277.3 442.7c-25 25-65.5 25-90.5 0l-168-168C6.7 262.7 0 246.5 0 229.5zM144 144c0-17.7-14.3-32-32-32s-32 14.3-32 32s14.3 32 32 32s32-14.3 32-32z"/></svg>Valor Máximo</Form.Label>
               <InputGroup className="mb-3">
                 <InputGroup.Text>$</InputGroup.Text>
                 <Form.Control
@@ -215,7 +215,7 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
 
             {/* FILTRO DE QUARTOS */}
             <Col className="d-flex flex-column align-items-center">
-              <Form.Label>N° de quartos</Form.Label>
+              <Form.Label className="d-flex align-items-center"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bed" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" className="svg-inline--fa fa-bed fa-w-20" data-v-832c9870="" data-v-45ef37c4=""><path fill="currentColor" d="M176 256c44.11 0 80-35.89 80-80s-35.89-80-80-80-80 35.89-80 80 35.89 80 80 80zm352-128H304c-8.84 0-16 7.16-16 16v144H64V80c0-8.84-7.16-16-16-16H16C7.16 64 0 71.16 0 80v352c0 8.84 7.16 16 16 16h32c8.84 0 16-7.16 16-16v-48h512v48c0 8.84 7.16 16 16 16h32c8.84 0 16-7.16 16-16V240c0-61.86-50.14-112-112-112z" data-v-832c9870="" data-v-45ef37c4="" class=""></path></svg>N° de quartos</Form.Label>
               <ButtonGroup className="">
                 <ToggleButton
                   type="radio"
@@ -274,7 +274,7 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
             {/* FILTRO DE BANHEIROS */}
 
             <Col className="d-flex flex-column align-items-center">
-              <Form.Label>N° de banheiros</Form.Label>
+              <Form.Label className="d-flex align-items-center"><svg className="svg-inline--fa" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M96 77.3c0-7.3 5.9-13.3 13.3-13.3c3.5 0 6.9 1.4 9.4 3.9l14.9 14.9C130 91.8 128 101.7 128 112c0 19.9 7.2 38 19.2 52c-5.3 9.2-4 21.1 3.8 29c9.4 9.4 24.6 9.4 33.9 0L289 89c9.4-9.4 9.4-24.6 0-33.9c-7.9-7.9-19.8-9.1-29-3.8C246 39.2 227.9 32 208 32c-10.3 0-20.2 2-29.2 5.5L163.9 22.6C149.4 8.1 129.7 0 109.3 0C66.6 0 32 34.6 32 77.3V256c-17.7 0-32 14.3-32 32s14.3 32 32 32H480c17.7 0 32-14.3 32-32s-14.3-32-32-32H96V77.3zM32 352v16c0 28.4 12.4 54 32 71.6V480c0 17.7 14.3 32 32 32s32-14.3 32-32V464H384v16c0 17.7 14.3 32 32 32s32-14.3 32-32V439.6c19.6-17.6 32-43.1 32-71.6V352H32z"/></svg>N° de banheiros</Form.Label>
               <ButtonGroup className="">
                 <ToggleButton
                   type="radio"
@@ -332,7 +332,7 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
             </Col>
           </Row>
           <Row>
-            <Col>
+            <Col className="d-flex align-items-center">
               <Form.Check
                 type="switch"
                 id="swimming"
@@ -342,6 +342,7 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
                 onChange={handleChange}
               />
             </Col>
+        
             <Col>
               <Form.Check
                 type="switch"
