@@ -15,7 +15,7 @@ function PropertiesList({ apiUrl, filter }) {
     (property.state===filter.state || filter.state === '') &&
     (property.type.toLowerCase()===filter.type.toLowerCase() || filter.type === '') &&
     (property.transaction.toLowerCase() === filter.transaction.toLowerCase() || filter.transaction === '') &&
-    (+property.bathrooms== +filter.bathrooms || (property.bathrooms>= 4 && +filter.bathrooms === 4) || filter.bathrooms === '') &&
+    (+property.bathrooms=== +filter.bathrooms || (property.bathrooms>= 4 && +filter.bathrooms === 4) || filter.bathrooms === '') &&
     (+property.bedrooms=== +filter.bedrooms || (property.bedrooms>= 4 && +filter.bedrooms === 4) || filter.bedrooms === '') &&
     ((+property.price >= +filter.minValue && +property.price <= +filter.maxValue) || filter.maxValue === '') &&
     (property.amenities.swimming === filter.amenities.swimming === true || filter.amenities.swimming === false) &&
