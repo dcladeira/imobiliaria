@@ -1,31 +1,52 @@
 import { useNavigate } from "react-router-dom";
 import { Button, Carousel, Badge, Row, Col, Container } from "react-bootstrap";
-import { useState } from "react";
-// import { useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import "./PropertiesDetails.css";
 import EditProperties from "./EditProperties";
 import axios from 'axios';
 
-function PropertiesDetails({ apiURL, body, setBody }) {
-  // const { id } = useParams();
-  const [property] = useState(body);
-  const navigate = useNavigate()
+function PropertiesDetails({ isAdmin, apiUrl}) {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [body, setBody] = useState({
+    code: "",
+    title: "",
+    description: "",
+    type: "",
+    transaction: "",
+    state: "",
+    city: "",
+    neighborhood: "",
+    address: "",
+    area: 0,
+    bedrooms: 0,
+    bathrooms: 0,
+    price: 0,
+    amenities: {
+      swimming: false,
+      concierge: false,
+      gourmet: false,
+      parking: false,
+    },
+    photos: [],
+  });
+  const [property, setProperty] = useState(body);
 
-  // useEffect(() => {
-  //   try {
-  //     const fetchProperty = async () => {
-  //       const response = await axios.get(`${apiURL}/${id}`);
-  //       console.log(response.data);
-  //       setProperty(response.data);
-  //     };
-  //     fetchProperty();
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // }, [apiURL, id, property]);
+  useEffect(() => {
+    try {
+      const fetchProperty = async () => {
+        const response = await axios.get(`${apiUrl}/${id}`);
+        setProperty(response.data);
+      };
+      fetchProperty();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [apiUrl, id]);
 
   const deleteProperty = async (id) => {
-    await axios.delete(`${apiURL}/${id}`);
+    await axios.delete(`${apiUrl}/${id}`);
     navigate("/");
   }
 
@@ -33,6 +54,7 @@ function PropertiesDetails({ apiURL, body, setBody }) {
     <Container key="property._id" className="propertyDescription">
       <h1>{property.title}</h1>
       <p>
+        <Badge bg="info">{property.transaction}</Badge>{" "}
         <Badge bg="info">{property.type}</Badge>{" "}
         <Badge bg="info">{property.city}</Badge>{" "}
         <Badge bg="primary">Imóvel {property.code}</Badge>
@@ -69,9 +91,9 @@ function PropertiesDetails({ apiURL, body, setBody }) {
         )}{" "}
       </p>
       <Carousel className="photos">
-        {property.photos.map((photo) => {
+        {property.photos.map((photo, index) => {
           return (
-            <Carousel.Item>
+            <Carousel.Item key={index}>
               <img
                 className="d-block w-100 h-50"
                 src={photo}
@@ -84,12 +106,12 @@ function PropertiesDetails({ apiURL, body, setBody }) {
 
       <Row className="footerButtons">
         <Col>
-          <Button variant="danger" onClick={()=>deleteProperty(property._id)}>
+          {isAdmin && <Button variant="danger" onClick={()=>deleteProperty(property._id)}>
             Excluir imóvel
-          </Button>
+          </Button>}
         </Col>
         <Col>
-          <EditProperties apiURL={apiURL} body={body} setBody={setBody} property={property} />
+          {isAdmin && <EditProperties id={id} apiUrl={apiUrl} body={body} setBody={setBody} property={property} />}
         </Col>
         <Col>
           <Button variant="secondary" onClick={() => navigate(-1)}>

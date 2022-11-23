@@ -1,15 +1,29 @@
 import { Button, Modal, Form, Stack, Row, Col } from "react-bootstrap";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
-function EditProperties({ apiURL, body, setBody, property }) {
+function EditProperties({ id, apiUrl, body, setBody }) {
   const [show, setShow] = useState(false);
+  // const [property, setProperty] = useState({});
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const navigate = useNavigate();
   const types = ["Casa", "Apartamento", "Terreno"];
   const transactions = ["Venda", "Aluguel"];
+
+  useEffect(() => {
+    try {
+      const fetchProperty = async () => {
+        const response = await axios.get(`${apiUrl}/${id}`);
+        setBody(response.data);
+      };
+      fetchProperty();
+    } catch (error) {
+      console.log(error);
+    }
+  }, [apiUrl, id, setBody]);
+
 
   const handleChange = (e) => {
     if (e.target.name.slice(0,8) === "checkbox") {
@@ -33,7 +47,7 @@ function EditProperties({ apiURL, body, setBody, property }) {
       const clone = {...body};
       const id = clone._id;
       delete clone._id;
-      await axios.put(`${apiURL}/${id}`, clone);
+      await axios.put(`${apiUrl}/${id}`, clone);
       handleClose();
       navigate("/");
     } catch (error) {
@@ -47,7 +61,7 @@ function EditProperties({ apiURL, body, setBody, property }) {
         Editar imóvel
       </Button>
 
-      <Modal show={show} onHide={handleClose}>
+      <Modal key={body._id} show={show} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Edição do imóvel</Modal.Title>
         </Modal.Header>
@@ -89,7 +103,7 @@ function EditProperties({ apiURL, body, setBody, property }) {
                   <Form.Select name="type" onChange={handleChange}>
                     <option value={body.type}>{body.type}</option>
                     {types
-                      .filter((t) => t !== property.type)
+                      .filter((t) => t !== body.type)
                       .map((t) => {
                         return <option value={t}>{t}</option>;
                       })}
@@ -100,7 +114,7 @@ function EditProperties({ apiURL, body, setBody, property }) {
                   <Form.Select name="transaction" onChange={handleChange}>
                     <option value={body.transaction}>{body.transaction}</option>
                     {transactions
-                      .filter((t) => t !== property.transaction)
+                      .filter((t) => t !== body.transaction)
                       .map((t) => {
                         return <option value={t}>{t}</option>;
                       })}

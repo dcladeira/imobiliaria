@@ -1,7 +1,8 @@
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
+// import AddProperties from "../Properties/AddProperties";
 import { Link } from "react-router-dom";
 
-function NavigationBar({isAdmin, showLogin, setShowLogin}) {
+function NavigationBar({isAdmin, showLogin, setShowLogin, apiUrl}) {
     function handleClick() {
         setShowLogin(true);
         console.log(showLogin);
@@ -10,13 +11,14 @@ function NavigationBar({isAdmin, showLogin, setShowLogin}) {
     return (
         <Navbar bg="light" expand="lg">
         <Container>
-          <Navbar.Brand href="#home">Iron Imobiliária</Navbar.Brand>
+          <Navbar.Brand>Iron Imobiliária</Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link className='nav-link' href="#home">Home</Nav.Link>
-              <Nav.Link className='nav-link' href="#contato">Contato</Nav.Link>
-              {isAdmin && <Link className='nav-link' to='/add-propertie'>Adicionar imóvel</Link>}
+              <Link className='nav-link' to="/">Home</Link>
+              <Link className='nav-link' to="/Contato">Contato</Link>
+              {isAdmin && <Link className='nav-link' to='/register'>Cadastrar imóvel</Link>}
+              {/* {isAdmin && <AddProperties apiUrl={apiUrl} />} */}
             </Nav>
             <Button onClick={handleClick} as="input" type="button" value="Logar" />
           </Navbar.Collapse>
