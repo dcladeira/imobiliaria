@@ -4,7 +4,7 @@ import { Card, ListGroup } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import './PropertiesList.css'
 
-function Properties({ apiUrl, filter }) {
+function PropertiesList({ apiUrl, filter }) {
   const [properties, setProperties] = useState([]);
 
   const propertiesFiltered = properties.filter(property =>{
@@ -72,4 +72,4 @@ function Properties({ apiUrl, filter }) {
   );
 }
 
-export default Properties;
+export default PropertiesList;
