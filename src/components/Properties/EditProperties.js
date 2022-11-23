@@ -1,13 +1,27 @@
-import { Button, Modal, Form, Stack, Row, Col } from "react-bootstrap";
+import {
+  Button,
+  Modal,
+  Form,
+  Stack,
+  Row,
+  Col,
+  ToastContainer,
+  Toast,
+} from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from 'axios';
+import axios from "axios";
 
 function EditProperties({ id, apiUrl, body, setBody }) {
   const [show, setShow] = useState(false);
-  // const [property, setProperty] = useState({});
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  const [showToastSuccess, setShowToastSuccess] = useState(false);
+  const [showToastDanger, setShowToastDanger] = useState(false);
+  const toggleShowToastSuccess = () => setShowToastSuccess(!showToastSuccess);
+  const toggleShowToastDanger = () => setShowToastDanger(!showToastDanger);
+
   const navigate = useNavigate();
   const types = ["Casa", "Apartamento", "Terreno"];
   const transactions = ["Venda", "Aluguel"];
@@ -24,16 +38,15 @@ function EditProperties({ id, apiUrl, body, setBody }) {
     }
   }, [apiUrl, id, setBody]);
 
-
   const handleChange = (e) => {
-    if (e.target.name.slice(0,8) === "checkbox") {
-      const {amenities} = body;
+    if (e.target.name.slice(0, 8) === "checkbox") {
+      const { amenities } = body;
       amenities[e.target.name.slice(9)] = e.target.checked;
-      setBody({ ...body});
+      setBody({ ...body });
       return;
-    } 
-    if (e.target.name.slice(0,5) === "photo") {
-      const {photos} = body;
+    }
+    if (e.target.name.slice(0, 5) === "photo") {
+      const { photos } = body;
       photos[Number(e.target.name.slice(-1))] = e.target.value;
       setBody({ ...body });
       return;
@@ -44,16 +57,32 @@ function EditProperties({ id, apiUrl, body, setBody }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const clone = {...body};
+      const clone = { ...body };
       const id = clone._id;
       delete clone._id;
       await axios.put(`${apiUrl}/${id}`, clone);
-      handleClose();
-      navigate("/");
+      toggleShowToastSuccess();
+      setTimeout(() => {
+        toggleShowToastSuccess();
+        handleClose();
+        navigate("/");
+      }, 2000);
     } catch (error) {
       console.log(error);
+      toggleShowToastDanger();
+      setTimeout(() => {
+        toggleShowToastDanger();
+        handleClose();
+        navigate("/");
+      }, 2000);
     }
-  }
+  };
+
+  const addPhoto = () => {
+    const { photos } = body;
+    photos.push("");
+    setBody({ ...body });
+  };
 
   return (
     <div>
@@ -65,13 +94,44 @@ function EditProperties({ id, apiUrl, body, setBody }) {
         <Modal.Header closeButton>
           <Modal.Title>Edição do imóvel</Modal.Title>
         </Modal.Header>
+        <ToastContainer position="top-center">
+          <Toast
+            bg="success"
+            show={showToastSuccess}
+            onClose={toggleShowToastSuccess}
+          >
+            <Toast.Header>
+              <strong className="me-auto">Iron House</strong>
+            </Toast.Header>
+            <Toast.Body>Imóvel alterado com sucesso!</Toast.Body>
+          </Toast>
+        </ToastContainer>
+        <ToastContainer position="top-center">
+          <Toast
+            bg="danger"
+            show={showToastDanger}
+            onClose={toggleShowToastDanger}
+          >
+            <Toast.Header>
+              <strong className="me-auto">Iron House</strong>
+            </Toast.Header>
+            <Toast.Body>
+              Não foi possível alterar neste momento, tente mais tarde.
+            </Toast.Body>
+          </Toast>
+        </ToastContainer>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
               <Row>
                 <Col xs="2">
                   <Form.Label>Código</Form.Label>
-                  <Form.Control type="text" name="code" value={body.code} onChange={handleChange}/>
+                  <Form.Control
+                    type="text"
+                    name="code"
+                    value={body.code}
+                    onChange={handleChange}
+                  />
                 </Col>
                 <Col>
                   <Form.Label>Título</Form.Label>
@@ -169,7 +229,12 @@ function EditProperties({ id, apiUrl, body, setBody }) {
               <Row>
                 <Col>
                   <Form.Label>Área</Form.Label>
-                  <Form.Control type="number" name="area" value={body.area} onChange={handleChange}/>
+                  <Form.Control
+                    type="number"
+                    name="area"
+                    value={body.area}
+                    onChange={handleChange}
+                  />
                 </Col>
                 <Col>
                   <Form.Label>Quartos</Form.Label>
@@ -191,7 +256,12 @@ function EditProperties({ id, apiUrl, body, setBody }) {
                 </Col>
                 <Col>
                   <Form.Label>Preço</Form.Label>
-                  <Form.Control type="number" name="price" value={body.price} onChange={handleChange}/>
+                  <Form.Control
+                    type="number"
+                    name="price"
+                    value={body.price}
+                    onChange={handleChange}
+                  />
                 </Col>
               </Row>
             </Form.Group>
@@ -230,32 +300,38 @@ function EditProperties({ id, apiUrl, body, setBody }) {
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>URL da fotos</Form.Label>
-              <Form.Control
-              className="mb-2"
-                type="text"
-                placeholder="Insira a URL da foto"
-                name="photo-0"
-                value={body.photos[0]}
-                onChange={handleChange}
-              />
-              <Form.Control
-              className="mb-2"
-                type="text"
-                placeholder="Insira a URL da foto"
-                name="photo-1"
-                value={body.photos[1]}
-                onChange={handleChange}
-              />
-              <Form.Control
-                type="text"
-                placeholder="Insira a URL da foto"
-                name="photo-2"
-                value={body.photos[2]}
-                onChange={handleChange}
-              />
+              {body.photos.map((photo, index) => {
+                return (
+                  <Row>
+                    <Col>
+                      <Form.Control
+                        className="mb-2 photoUrl"
+                        type="text"
+                        placeholder="Insira a URL da foto"
+                        name={"photo-" + index}
+                        value={photo}
+                        onChange={handleChange}
+                      />
+                    </Col>
+                    {/* <Col xs="1">
+                      <Button variant="danger" onClick={delPhoto(index)}>-</Button>
+                    </Col> */}
+                  </Row>
+                );
+              })}
+              <Row>
+                <Col></Col>
+                <Col>
+                  <Button onClick={addPhoto}>+</Button>
+                </Col>
+              </Row>
             </Form.Group>
-          <Button variant="secondary" onClick={handleClose}>Cancelar</Button>
-          <Button variant="primary" type="submit">Salvar</Button>
+            <Button variant="secondary" onClick={handleClose}>
+              Cancelar
+            </Button>
+            <Button variant="primary" type="submit">
+              Salvar
+            </Button>
           </Form>
         </Modal.Body>
       </Modal>

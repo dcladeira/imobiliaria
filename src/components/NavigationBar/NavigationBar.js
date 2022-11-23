@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 function NavigationBar({isAdmin, showLogin, setShowLogin, apiUrl}) {
     function handleClick() {
         setShowLogin(true);
-        console.log(showLogin);
     }
 
     return (

@@ -45,19 +45,22 @@ function AddProperties({ apiUrl }) {
       gourmet: false,
       parking: false,
     },
-    photos: [],
+    photos: [""],
   });
 
   const handleChange = (e) => {
+    console.log(document.getElementById("photosUrl"));
     if (e.target.name.slice(0, 8) === "checkbox") {
       const { amenities } = body;
       amenities[e.target.name.slice(9)] = e.target.checked;
       setBody({ ...body });
-    } else if (e.target.name.slice(0, 5) === "photo") {
+    }
+    else if (e.target.name.slice(0, 5) === "photo") {
       const { photos } = body;
       photos[Number(e.target.name.slice(-1))] = e.target.value;
       setBody({ ...body });
-    } else {
+    }
+    else {
       setBody({ ...body, [e.target.name]: e.target.value });
     }
   };
@@ -89,7 +92,7 @@ function AddProperties({ apiUrl }) {
             gourmet: false,
             parking: false,
           },
-          photos: [],
+          photos: [""],
         });
         handleClose();
         navigate("/");
@@ -105,24 +108,20 @@ function AddProperties({ apiUrl }) {
     }
   };
 
-  const renderUrl = () => {
-  return (
-    <Form.Control
-    className="mb-2"
-    type="text"
-    placeholder="Insira a URL da foto"
-    name="photo-1"
-    value={body.photos[1]}
-    onChange={handleChange}
-  />
-  )
+  const addPhoto = () => {
+    const {photos} = body;
+    photos.push("");
+    setBody({...body});
   }
+
+  const delPhoto = (i) => {
+    // let {photos} = body;
+    // photos.filter((a, b) => b !== i);
+    // setBody({...body});
+  }
+
   return (
     <div>
-      {/* <Button variant="ligth" onClick={handleShow}>
-        Cadastrar imóvel
-      </Button>
-      <Modal key={body._id} show={show} onHide={handleClose}> */}
       <Modal
         key={body._id}
         show={show}
@@ -333,39 +332,33 @@ function AddProperties({ apiUrl }) {
                 />
               </Stack>
             </Form.Group>
-            <Form.Group className="mb-3">
+            <Form.Group className="mb-3" id="photosUrl" onChange={handleChange}>
               <Form.Label>URL da fotos</Form.Label>
+              {body.photos.map((photo, index) => {
+                return (
+                  <Row>
+                    <Col>
+                      <Form.Control
+                        className="mb-2 photoUrl"
+                        type="text"
+                        placeholder="Insira a URL da foto"
+                        name={"photo-"+index}
+                        value={photo}
+                        onChange={handleChange}
+                      />
+                    </Col>
+                    {/* <Col xs="1">
+                      <Button variant="danger" onClick={delPhoto(index)}>-</Button>
+                    </Col> */}
+                  </Row>
+                );
+              })}
               <Row>
+                <Col></Col>
                 <Col>
-                  <Form.Control
-                    className="mb-2"
-                    type="text"
-                    placeholder="Insira a URL da foto"
-                    name="photo-0"
-                    value={body.photos[0]}
-                    onChange={handleChange}
-                  />
-                </Col>
-                <Col xs="1">
-                  <Button onClick={renderUrl}>+</Button>
+                  <Button onClick={addPhoto}>+</Button>
                 </Col>
               </Row>
-
-              {/* <Form.Control
-                className="mb-2"
-                type="text"
-                placeholder="Insira a URL da foto"
-                name="photo-1"
-                value={body.photos[1]}
-                onChange={handleChange}
-              />
-              <Form.Control
-                type="text"
-                placeholder="Insira a URL da foto"
-                name="photo-2"
-                value={body.photos[2]}
-                onChange={handleChange}
-              /> */}
             </Form.Group>
             <Button
               variant="secondary"
@@ -376,7 +369,7 @@ function AddProperties({ apiUrl }) {
               Cancelar
             </Button>
             <Button variant="primary" type="submit">
-              Salvar
+              Salvar imóvel
             </Button>
           </Form>
         </Modal.Body>
