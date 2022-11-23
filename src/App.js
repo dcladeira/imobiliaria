@@ -15,13 +15,12 @@ function App() {
 
   return (
     <div className="App">
-      <NavigationBar isAdmin={isAdmin} setShowLogin={setShowLogin} apiUrl={apiUrl} />
+      <NavigationBar isAdmin={isAdmin} setIsAdmin={setIsAdmin} setShowLogin={setShowLogin} apiUrl={apiUrl} />
       <LoginModal  showLogin={showLogin} setShowLogin={setShowLogin} isAdmin={isAdmin} setIsAdmin={setIsAdmin}/>
       <Routes>
         <Route path="/" element={<HomePage apiUrl={apiUrl}/>} />
-        {/* <Route path="/" element={<HomePage apiUrl={apiUrl} body={body} setBody={setBody}/>} /> */}
         <Route path="/properties/:id" element={<PropertiesDetails isAdmin={isAdmin} apiUrl={apiUrl} />}/>
-        {/* <Route path="/add-properties" element={<AddProperties apiUrl={apiUrl} body={body} setBody={setBody}/>}/> */}
+        <Route path="/register" element={<AddProperties apiUrl={apiUrl} />}/>
       </Routes>
     </div>
   );
