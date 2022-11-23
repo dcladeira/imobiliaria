@@ -7,6 +7,7 @@ import NavigationBar from "./components/NavigationBar/NavigationBar";
 // import AddProperties from "./components/Properties/AddProperties";
 import PropertiesDetails from "./components/Properties/PropertiesDetails";
 import PropertiesList from "./components/Properties/PropertiesList";
+import AddProperties from "./components/Properties/AddProperties";
 // import HomePage from "./pages/HomePage";
 
 function App() {
@@ -23,7 +24,7 @@ function App() {
         <Route path="/" element={<PropertiesList apiUrl={apiUrl}/>}/>
         {/* <Route path="/" element={<HomePage apiUrl={apiUrl} body={body} setBody={setBody}/>} /> */}
         <Route path="/properties/:id" element={<PropertiesDetails isAdmin={isAdmin} apiUrl={apiUrl} />}/>
-        {/* <Route path="/add-properties" element={<AddProperties apiUrl={apiUrl} body={body} setBody={setBody}/>}/> */}
+        <Route path="/register" element={<AddProperties apiUrl={apiUrl}/>}/>
       </Routes>
     </div>
   );

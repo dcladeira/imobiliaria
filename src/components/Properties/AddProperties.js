@@ -1,12 +1,27 @@
 import { useNavigate } from "react-router-dom";
-import { Button, Modal, Form, Row, Col, Stack } from "react-bootstrap";
+import {
+  Button,
+  Modal,
+  Form,
+  Row,
+  Col,
+  Stack,
+  Toast,
+  ToastContainer,
+} from "react-bootstrap";
 import { useState } from "react";
 import axios from "axios";
 
 function AddProperties({ apiUrl }) {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  // const handleShow = () => setShow(true);
+
+  const [showToastSuccess, setShowToastSuccess] = useState(false);
+  const [showToastDanger, setShowToastDanger] = useState(false);
+  const toggleShowToastSuccess = () => setShowToastSuccess(!showToastSuccess);
+  const toggleShowToastDanger = () => setShowToastDanger(!showToastDanger);
+
   const navigate = useNavigate();
   const types = ["Casa", "Apartamento", "Terreno"];
   const transactions = ["Venda", "Aluguel"];
@@ -38,12 +53,12 @@ function AddProperties({ apiUrl }) {
       const { amenities } = body;
       amenities[e.target.name.slice(9)] = e.target.checked;
       setBody({ ...body });
-    } else if (e.target.name.slice(0,5) === "photo") {
-        const {photos} = body;
-        photos[Number(e.target.name.slice(-1))] = e.target.value;
-        setBody({ ...body });
+    } else if (e.target.name.slice(0, 5) === "photo") {
+      const { photos } = body;
+      photos[Number(e.target.name.slice(-1))] = e.target.value;
+      setBody({ ...body });
     } else {
-        setBody({ ...body, [e.target.name]: e.target.value });
+      setBody({ ...body, [e.target.name]: e.target.value });
     }
   };
 
@@ -51,23 +66,99 @@ function AddProperties({ apiUrl }) {
     e.preventDefault();
     try {
       await axios.post(apiUrl, body);
-      handleClose();
-      navigate("/");
+      toggleShowToastSuccess();
+      setTimeout(() => {
+        toggleShowToastSuccess();
+        setBody({
+          code: "",
+          title: "",
+          description: "",
+          type: "",
+          transaction: "",
+          state: "",
+          city: "",
+          neighborhood: "",
+          address: "",
+          area: 0,
+          bedrooms: 0,
+          bathrooms: 0,
+          price: 0,
+          amenities: {
+            swimming: false,
+            concierge: false,
+            gourmet: false,
+            parking: false,
+          },
+          photos: [],
+        });
+        handleClose();
+        navigate("/");
+      }, 2000);
     } catch (error) {
       console.log(error);
+      toggleShowToastDanger();
+      setTimeout(() => {
+        toggleShowToastDanger();
+        handleClose();
+        navigate("/");
+      }, 2000);
     }
   };
 
+  const renderUrl = () => {
+  return (
+    <Form.Control
+    className="mb-2"
+    type="text"
+    placeholder="Insira a URL da foto"
+    name="photo-1"
+    value={body.photos[1]}
+    onChange={handleChange}
+  />
+  )
+  }
   return (
     <div>
-      <Button variant="ligth" onClick={handleShow}>
+      {/* <Button variant="ligth" onClick={handleShow}>
         Cadastrar imóvel
       </Button>
-
-      <Modal key={body._id} show={show} onHide={handleClose}>
+      <Modal key={body._id} show={show} onHide={handleClose}> */}
+      <Modal
+        key={body._id}
+        show={show}
+        onHide={() => {
+          navigate(-1);
+        }}
+      >
         <Modal.Header closeButton>
           <Modal.Title>Cadastrar imóvel</Modal.Title>
         </Modal.Header>
+        <ToastContainer position="top-center">
+          <Toast
+            bg="success"
+            show={showToastSuccess}
+            onClose={toggleShowToastSuccess}
+          >
+            <Toast.Header>
+              <strong className="me-auto">Iron House</strong>
+            </Toast.Header>
+            <Toast.Body>Imóvel cadastrado com sucesso!</Toast.Body>
+          </Toast>
+        </ToastContainer>
+        <ToastContainer position="top-center">
+          <Toast
+            bg="danger"
+            show={showToastDanger}
+            onClose={toggleShowToastDanger}
+          >
+            <Toast.Header>
+              <strong className="me-auto">Iron House</strong>
+            </Toast.Header>
+            <Toast.Body>
+              Não foi possível cadastrar neste momento, tente mais tarde.
+            </Toast.Body>
+          </Toast>
+        </ToastContainer>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
@@ -109,19 +200,19 @@ function AddProperties({ apiUrl }) {
                 <Col>
                   <Form.Label>Tipo</Form.Label>
                   <Form.Select name="type" onChange={handleChange}>
-                    {types
-                      .map((t) => {
-                        return <option value={t}>{t}</option>;
-                      })}
+                    <option value="0">Selecione uma opção</option>
+                    {types.map((t) => {
+                      return <option value={t}>{t}</option>;
+                    })}
                   </Form.Select>
                 </Col>
                 <Col>
                   <Form.Label>Transação</Form.Label>
                   <Form.Select name="transaction" onChange={handleChange}>
-                    {transactions
-                      .map((t) => {
-                        return <option value={t}>{t}</option>;
-                      })}
+                    <option value="0">Selecione uma opção</option>
+                    {transactions.map((t) => {
+                      return <option value={t}>{t}</option>;
+                    })}
                   </Form.Select>
                 </Col>
               </Row>
@@ -173,7 +264,12 @@ function AddProperties({ apiUrl }) {
               <Row>
                 <Col>
                   <Form.Label>Área</Form.Label>
-                  <Form.Control type="number" name="area" value={body.area} onChange={handleChange}/>
+                  <Form.Control
+                    type="number"
+                    name="area"
+                    value={body.area}
+                    onChange={handleChange}
+                  />
                 </Col>
                 <Col>
                   <Form.Label>Quartos</Form.Label>
@@ -195,7 +291,12 @@ function AddProperties({ apiUrl }) {
                 </Col>
                 <Col>
                   <Form.Label>Preço</Form.Label>
-                  <Form.Control type="number" name="price" value={body.price} onChange={handleChange}/>
+                  <Form.Control
+                    type="number"
+                    name="price"
+                    value={body.price}
+                    onChange={handleChange}
+                  />
                 </Col>
               </Row>
             </Form.Group>
@@ -234,16 +335,24 @@ function AddProperties({ apiUrl }) {
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>URL da fotos</Form.Label>
-              <Form.Control
-              className="mb-2"
-                type="text"
-                placeholder="Insira a URL da foto"
-                name="photo-0"
-                value={body.photos[0]}
-                onChange={handleChange}
-              />
-              <Form.Control
-              className="mb-2"
+              <Row>
+                <Col>
+                  <Form.Control
+                    className="mb-2"
+                    type="text"
+                    placeholder="Insira a URL da foto"
+                    name="photo-0"
+                    value={body.photos[0]}
+                    onChange={handleChange}
+                  />
+                </Col>
+                <Col xs="1">
+                  <Button onClick={renderUrl}>+</Button>
+                </Col>
+              </Row>
+
+              {/* <Form.Control
+                className="mb-2"
                 type="text"
                 placeholder="Insira a URL da foto"
                 name="photo-1"
@@ -256,10 +365,19 @@ function AddProperties({ apiUrl }) {
                 name="photo-2"
                 value={body.photos[2]}
                 onChange={handleChange}
-              />
+              /> */}
             </Form.Group>
-          <Button variant="secondary" onClick={handleClose}>Cancelar</Button>
-          <Button variant="primary" type="submit">Salvar</Button>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                navigate(-1);
+              }}
+            >
+              Cancelar
+            </Button>
+            <Button variant="primary" type="submit">
+              Salvar
+            </Button>
           </Form>
         </Modal.Body>
       </Modal>
