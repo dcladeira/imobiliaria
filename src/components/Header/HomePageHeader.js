@@ -33,6 +33,7 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
   }, [cities, states, apiUrl]);
 
   function handleChange(e) {
+    console.log(e.target.nextSibiling, e.target.value)
     if (e.target.type === "checkbox") {
       setFilter({
         ...filter,
@@ -42,6 +43,15 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
       setFilter({ ...filter, [e.target.name]: e.target.value });
     }
   }
+
+  function handleClick(e) {
+
+    if(e.target.previousSibling.value === filter[e.target.previousSibling.name]) {
+        setFilter({ ...filter, [e.target.previousSibling.name]: '' });
+    } else {
+    setFilter({ ...filter, [e.target.previousSibling.name]: e.target.previousSibling.value });
+  }
+}
 
   function handleClear() {
     setFilter({
@@ -80,7 +90,9 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
               name="transaction"
               value="venda"
               checked={filter.transaction === "venda"}
-              onChange={handleChange}
+             // Antes estava usando o onChange={handleChange}, porém como é um radio, ele não me dava a opção de deixar nenhuma opção selecionada, ai adaptei usando o onclick
+             onClick={handleClick}
+
             >
               VENDA
             </ToggleButton>
@@ -92,7 +104,8 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
               name="transaction"
               value="aluguel"
               checked={filter.transaction === "aluguel"}
-              onChange={handleChange}
+             // Antes estava usando o onChange={handleChange}, porém como é um radio, ele não me dava a opção de deixar nenhuma opção selecionada, ai adaptei usando o onclick
+            onClick={handleClick}
             >
               ALUGUEL
             </ToggleButton>
@@ -212,7 +225,8 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
                   name="bedrooms"
                   value="1"
                   checked={filter.bedrooms === "1"}
-                  onChange={handleChange}
+                  // Antes estava usando o onChange={handleChange}, porém como é um radio, ele não me dava a opção de deixar nenhuma opção selecionada, ai adaptei usando o onclick
+                  onClick={handleClick}
                 >
                   1
                 </ToggleButton>
@@ -224,7 +238,8 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
                   name="bedrooms"
                   value="2"
                   checked={filter.bedrooms === "2"}
-                  onChange={handleChange}
+                  // Antes estava usando o onChange={handleChange}, porém como é um radio, ele não me dava a opção de deixar nenhuma opção selecionada, ai adaptei usando o onclick
+                  onClick={handleClick}
                 >
                   2
                 </ToggleButton>
@@ -236,7 +251,8 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
                   name="bedrooms"
                   value="3"
                   checked={filter.bedrooms === "3"}
-                  onChange={handleChange}
+                  // Antes estava usando o onChange={handleChange}, porém como é um radio, ele não me dava a opção de deixar nenhuma opção selecionada, ai adaptei usando o onclick
+                  onClick={handleClick}
                 >
                   3
                 </ToggleButton>
@@ -248,7 +264,8 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
                   name="bedrooms"
                   value="4"
                   checked={filter.bedrooms === "4"}
-                  onChange={handleChange}
+                  // Antes estava usando o onChange={handleChange}, porém como é um radio, ele não me dava a opção de deixar nenhuma opção selecionada, ai adaptei usando o onclick
+                  onClick={handleClick}
                 >
                   4 +
                 </ToggleButton>
@@ -267,7 +284,8 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
                   name="bathrooms"
                   value="1"
                   checked={filter.bathrooms === "1"}
-                  onChange={handleChange}
+                  // Antes estava usando o onChange={handleChange}, porém como é um radio, ele não me dava a opção de deixar nenhuma opção selecionada, ai adaptei usando o onclick
+                  onClick={handleClick}
                 >
                   1
                 </ToggleButton>
@@ -279,7 +297,8 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
                   name="bathrooms"
                   value="2"
                   checked={filter.bathrooms === "2"}
-                  onChange={handleChange}
+                  // Antes estava usando o onChange={handleChange}, porém como é um radio, ele não me dava a opção de deixar nenhuma opção selecionada, ai adaptei usando o onclick
+                  onClick={handleClick}
                 >
                   2
                 </ToggleButton>
@@ -291,7 +310,8 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
                   name="bathrooms"
                   value="3"
                   checked={filter.bathrooms === "3"}
-                  onChange={handleChange}
+                  // Antes estava usando o onChange={handleChange}, porém como é um radio, ele não me dava a opção de deixar nenhuma opção selecionada, ai adaptei usando o onclick
+                  onClick={handleClick}
                 >
                   3
                 </ToggleButton>
@@ -303,7 +323,8 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
                   name="bathrooms"
                   value="4"
                   checked={filter.bathrooms === "4"}
-                  onChange={handleChange}
+                  // Antes estava usando o onChange={handleChange}, porém como é um radio, ele não me dava a opção de deixar nenhuma opção selecionada, ai adaptei usando o onclick
+                  onClick={handleClick}
                 >
                   4 +
                 </ToggleButton>
