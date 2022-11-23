@@ -4,13 +4,13 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import LoginModal from "./components/Modal/LoginModal";
 import NavigationBar from "./components/NavigationBar/NavigationBar";
-import AddProperties from "./components/Properties/AddProperties";
-import Properties from "./components/Properties/PropertiesList";
+// import AddProperties from "./components/Properties/AddProperties";
+// import PropertiesDetails from "./components/Properties/PropertiesDetails";
 import HomePage from "./pages/HomePage";
 
 function App() {
   const apiUrl = "https://ironrest.cyclic.app/properties/";
-  const [isAdmin,setIsAdmin] = useState(false)
+  const [isAdmin,setIsAdmin] = useState(false);
   const [showLogin, setShowLogin] = useState(false);
 
 
@@ -20,10 +20,8 @@ function App() {
       <LoginModal  showLogin={showLogin} setShowLogin={setShowLogin} isAdmin={isAdmin} setIsAdmin={setIsAdmin}/>
       <Routes>
         <Route path="/" element={<HomePage apiUrl={apiUrl}/>} />
-        <Route path="/properties" element={<Properties apiUrl={apiUrl}/>} />
-        <Route path="/add-properties" element={<AddProperties apiUrl={apiUrl}/>} />
-        <Route path="/add-properties" element={<AddProperties apiUrl={apiUrl}/>} />
-        <Route path="/add-properties" element={<AddProperties apiUrl={apiUrl}/>} />
+        {/* <Route path="/properties/:id" element={<PropertiesDetails apiUrl={apiUrl}/>} /> */}
+        {/* <Route path="/add-properties" element={<AddProperties apiUrl={apiUrl}/>} /> */}
       </Routes>
     </div>
   );

@@ -33,23 +33,32 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
   }, [cities, states, apiUrl]);
 
   function handleChange(e) {
-    if (e.target.type === 'checkbox') {
-        setFilter({ ...filter, amenities: {...filter.amenities,[e.target.name]: e.target.checked }});
+    if (e.target.type === "checkbox") {
+      setFilter({
+        ...filter,
+        amenities: { ...filter.amenities, [e.target.name]: e.target.checked },
+      });
+    } else {
+      setFilter({ ...filter, [e.target.name]: e.target.value });
     }
-    else {setFilter({ ...filter, [e.target.name]: e.target.value });}
-    
   }
 
   function handleClear() {
     setFilter({
       city: "",
       state: "",
+      type: "",
       transaction: "venda",
       bedrooms: "",
       bathrooms: "",
       minValue: "0",
       maxValue: "",
-
+      amenities: {
+        swimming: false,
+        concierge: false,
+        gourmet: false,
+        parking: false,
+      },
     });
   }
 
@@ -108,7 +117,7 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
                 size="lg"
                 aria-label="Default select example"
               >
-                <option value=''>Tipo de imóvel</option>
+                <option value="">Tipo de imóvel</option>
                 <option value="casa">Casa</option>
                 <option value="apartamento">Apartamento</option>
                 <option value="terreno">Terreno</option>
@@ -123,7 +132,9 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
                 size="lg"
                 aria-label="Default select example"
               >
-                <option name="state" value=''>Estado</option>
+                <option name="state" value="">
+                  Estado
+                </option>
 
                 {states.map((state) => {
                   return (
@@ -143,7 +154,9 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
                 size="lg"
                 aria-label="Default select example"
               >
-                <option name="city" value=''>Cidade</option>
+                <option name="city" value="">
+                  Cidade
+                </option>
                 {cities.map((city) => {
                   return (
                     <option key={city} name="city" value={city}>
@@ -299,47 +312,47 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
           </Row>
           <Row>
             <Col>
-            <Form.Check
-              type="switch"
-              id="swimming"
-              name="swimming"
-              label="Piscina"
-              checked={filter.amenities.swimming}
-              onChange={handleChange}
-            />
+              <Form.Check
+                type="switch"
+                id="swimming"
+                name="swimming"
+                label="Piscina"
+                checked={filter.amenities.swimming}
+                onChange={handleChange}
+              />
             </Col>
             <Col>
-            <Form.Check
-              type="switch"
-              id="concierge"
-              name="concierge"
-              label="Concierge"
-              checked={filter.amenities.concierge}
-              onChange={handleChange}
-            />
+              <Form.Check
+                type="switch"
+                id="concierge"
+                name="concierge"
+                label="Concierge"
+                checked={filter.amenities.concierge}
+                onChange={handleChange}
+              />
             </Col>
-          
-          <Col>
-          <Form.Check
-              type="switch"
-              id="gourmet"
-              name="gourmet"
-              label="Espaço Gourmet"
-              checked={filter.amenities.gourmet}
-              onChange={handleChange}
-            />
-          </Col>
+
             <Col>
-            <Form.Check
-              type="switch"
-              id="parking"
-              name="parking"
-              label="Estacionamento"
-              checked={filter.amenities.parking}
-              onChange={handleChange}
-            />
+              <Form.Check
+                type="switch"
+                id="gourmet"
+                name="gourmet"
+                label="Espaço Gourmet"
+                checked={filter.amenities.gourmet}
+                onChange={handleChange}
+              />
             </Col>
-            </Row>
+            <Col>
+              <Form.Check
+                type="switch"
+                id="parking"
+                name="parking"
+                label="Estacionamento"
+                checked={filter.amenities.parking}
+                onChange={handleChange}
+              />
+            </Col>
+          </Row>
         </Form>
       </section>
     </div>

@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import HomePageHeader from "../components/Header/HomePageHeader";
-import Properties from "../components/Properties/PropertiesList";
+import PropertiesList from "../components/Properties/PropertiesList";
 
 function HomePage({ apiUrl, setIsAdmin, showLogin, setShowLogin }) {
 
 const [filter, setFilter] = useState({
         city: "",
         state: "",
-        transaction: "venda",
+        type: "",
+        transaction: "",
         bedrooms: "",
         bathrooms: "",
         minValue: "0",
@@ -25,7 +26,7 @@ const [filter, setFilter] = useState({
 
     <HomePageHeader apiUrl={apiUrl} filter={filter} setFilter={setFilter}/>
 
-    <Properties apiUrl={apiUrl} filter={filter} setFilter={setFilter} />
+    <PropertiesList apiUrl={apiUrl} filter={filter} setFilter={setFilter} />
 
 
   </div>;
