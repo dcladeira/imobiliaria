@@ -148,7 +148,7 @@ function AddProperties({ apiUrl }) {
             <Toast.Header>
               <strong className="me-auto">Iron House</strong>
             </Toast.Header>
-            <Toast.Body>Imóvel cadastrado com sucesso!</Toast.Body>
+            <Toast.Body className="text-white">Imóvel cadastrado com sucesso!</Toast.Body>
           </Toast>
         </ToastContainer>
         <ToastContainer position="middle-center">
@@ -160,7 +160,7 @@ function AddProperties({ apiUrl }) {
             <Toast.Header>
               <strong className="me-auto">Iron House</strong>
             </Toast.Header>
-            <Toast.Body>
+            <Toast.Body className="text-white">
               Não foi possível cadastrar neste momento, tente mais tarde.
             </Toast.Body>
           </Toast>

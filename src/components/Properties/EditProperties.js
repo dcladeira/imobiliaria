@@ -111,7 +111,7 @@ function EditProperties({ id, apiUrl, body, setBody }) {
             <Toast.Header>
               <strong className="me-auto">Iron House</strong>
             </Toast.Header>
-            <Toast.Body>Imóvel alterado com sucesso!</Toast.Body>
+            <Toast.Body className="text-white">Imóvel alterado com sucesso!</Toast.Body>
           </Toast>
         </ToastContainer>
         <ToastContainer position="middle-center">
@@ -123,7 +123,7 @@ function EditProperties({ id, apiUrl, body, setBody }) {
             <Toast.Header>
               <strong className="me-auto">Iron House</strong>
             </Toast.Header>
-            <Toast.Body>
+            <Toast.Body className="text-white">
               Não foi possível alterar neste momento, tente mais tarde.
             </Toast.Body>
           </Toast>
