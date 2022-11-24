@@ -1,0 +1,24 @@
+.contact-container .card {
+    background-color: hsla(238, 69%, 14%, 0);
+    border:0.1rem solid rgba(255, 255, 255, 0.692)  !important;
+    
+    border-radius: 1rem !important;
+}
+
+.contact-container {
+   background-image: url("../../images/footer.jfif");
+}
+
+.contact-container .card-header{
+    font-size: 1.4rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.contact-container .card-body{
+    font-size: 1.4rem;
+}
+
+.contact-container .svg-inline--fa {
+    height: 2rem;
+}

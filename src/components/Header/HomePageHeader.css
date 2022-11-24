@@ -1,7 +1,7 @@
 .hp-bg {
     background-image: url("../../images/home-page.png");
     background-size: cover;
-    height: 35rem;
+    height: 40rem;
     color:black;
 }
 
@@ -9,11 +9,14 @@ h1 {font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     text-decoration:underline;
     font-size: 6rem;
     color:white;
+    text-shadow: 2px 2px black;
 }
 
 h2 {
     font-size: 2.5rem;
     color:white;
+    text-shadow: 2px 2px black;
+    margin-bottom: 3rem;
 }
 
 label {
@@ -22,10 +25,10 @@ label {
 }
 
 .filter-container {
-    width: 100%;
-    background-color:rgba(214, 214, 214, 0.7);
-    padding: 2rem 6%;
-    
+    width: 90%;
+    background-color:rgba(214, 214, 214, 0.8);
+    padding: 2rem 4%;
+    border-radius: 1rem;
 }
 
 .select-filter {
@@ -41,14 +44,24 @@ option {
 }
 
 .btn-group > label, .clear-filter {
-    --bs-btn-border-color: #0a4fb5;
-    border-color: #0a4fb5;
-    color: #0a4fb5;
+    --bs-btn-border-color: #0b0d3bcc;
+    border-color: #0b0d3bcc;
+    color: #0b0d3bcc;
     font-weight: 700;
 }
 
+.btn-check:checked+.btn {
+    background-color: #0b0d3bcc;
+    border-color: #0b0d3bcc;
+}
+
+.btn-check:hover+.btn {
+    background-color: rgb(168, 168, 168);
+    color: #0b0d3bcc;
+}
+
 .clear-filter:hover {
-    background-color: #0a4fb5;
+    background-color: #0b0d3bcc;
 }
 
 .form-switch .form-check-input {
@@ -65,4 +78,9 @@ option {
 .form-check {
     display: flex;
     align-items: center;
+}
+
+.svg-inline--fa {
+    height: 1.2rem;
+    margin-right: 0.5rem;
 }

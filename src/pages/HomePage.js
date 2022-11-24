@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import Contacts from "../components/Contacts/Contacts";
 import HomePageHeader from "../components/Header/HomePageHeader";
 import PropertiesList from "../components/Properties/PropertiesList";
 
@@ -28,7 +29,7 @@ const [filter, setFilter] = useState({
 
     <PropertiesList apiUrl={apiUrl} filter={filter} setFilter={setFilter} />
 
-
+    <Contacts />
   </div>;
 }
 

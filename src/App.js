@@ -15,7 +15,7 @@ function App() {
 
   return (
     <div className="App">
-      <NavigationBar isAdmin={isAdmin} setShowLogin={setShowLogin} apiUrl={apiUrl} />
+      <NavigationBar isAdmin={isAdmin} setIsAdmin={setIsAdmin} setShowLogin={setShowLogin} apiUrl={apiUrl} />
       <LoginModal  showLogin={showLogin} setShowLogin={setShowLogin} isAdmin={isAdmin} setIsAdmin={setIsAdmin}/>
       <Routes>
         <Route path="/" element={<HomePage apiUrl={apiUrl}/>} />

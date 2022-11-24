@@ -1,0 +1,26 @@
+.navbar .navbar-brand {
+    padding: 0 3rem 0 0;
+    font-weight: bold;
+    margin: 0;
+    font-size: 1.5rem;
+    font-family: Comic Sans MS, Comic Sans, cursive;
+}
+
+.navbar  .navbar-nav > .nav-link {
+    font-size: 1.2rem;
+    padding: 0 3rem 0 0 !important;
+    font-weight: bold;
+    margin: 0;
+}
+
+.navbar .container {
+    align-items: baseline;
+}
+
+.navbar input {
+    background-color: #0b0d3bcc;
+}
+.navbar input:hover {
+    background-color: #151868cc;
+}
+

@@ -6,3 +6,17 @@
 .card {
 margin:2rem;
 }
+
+.rent-tag {
+    background-color:  #0b0d3bcc;
+    padding: 0.3rem 0.8rem;
+    border-radius: 0.3rem;
+    color:white;
+}
+
+.sell-tag {
+    background-color:  rgba(255, 0, 0, 0.85);
+    padding: 0.3rem 0.8rem;
+    border-radius: 0.3rem;
+    color:white;
+}

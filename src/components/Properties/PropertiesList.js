@@ -15,8 +15,8 @@ function PropertiesList({ apiUrl, filter }) {
     (property.state===filter.state || filter.state === '') &&
     (property.type.toLowerCase()===filter.type.toLowerCase() || filter.type === '') &&
     (property.transaction.toLowerCase() === filter.transaction.toLowerCase() || filter.transaction === '') &&
-    (property.bathrooms==filter.bathrooms || (property.bathrooms>= 4 && filter.bathrooms == 4) || filter.bathrooms === '') &&
-    (property.bedrooms==filter.bedrooms || (property.bedrooms>= 4 && filter.bedrooms == 4) || filter.bedrooms === '') &&
+    (+property.bathrooms=== +filter.bathrooms || (property.bathrooms>= 4 && +filter.bathrooms === 4) || filter.bathrooms === '') &&
+    (+property.bedrooms=== +filter.bedrooms || (property.bedrooms>= 4 && +filter.bedrooms === 4) || filter.bedrooms === '') &&
     ((+property.price >= +filter.minValue && +property.price <= +filter.maxValue) || filter.maxValue === '') &&
     (property.amenities.swimming === filter.amenities.swimming === true || filter.amenities.swimming === false) &&
     (property.amenities.concierge === filter.amenities.concierge === true || filter.amenities.concierge === false) &&
@@ -44,11 +44,14 @@ function PropertiesList({ apiUrl, filter }) {
     <div className="d-flex justify-content-center flex-wrap">
       {propertiesFiltered.map((property) => {
         return (
-           <Link className="nav-link" to={`/properties/${property._id}`}>
-          <Card className="shadow p-3 mb-5 bg-body rounded" key={property._id} style={{ width: "22rem" }}>
+           <Link key={property._id} className="nav-link" to={`/properties/${property._id}`}>
+          <Card className="shadow p-3 mb-5 bg-body rounded" style={{ width: "22rem" }}>
           <Card.Body className="d-flex justify-content-between">
-              <Card.Title>{property.transaction}</Card.Title>
-              <Card.Text>{property.price}</Card.Text>
+              <Card.Title>
+              {property.transaction.toLowerCase() === 'venda' && <p className="sell-tag">{property.transaction}</p>}
+              {property.transaction.toLowerCase() === 'aluguel' && <p className="rent-tag">{property.transaction}</p>}
+              </Card.Title>
+              <Card.Text>{(+property.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Card.Text>
             </Card.Body>
             <Card.Img variant="top" src={property.photos[0]} />
             <Card.Body>
