@@ -28,7 +28,6 @@ function PropertiesList({ apiUrl, filter }) {
     return false}
   })
 
-
   useEffect(() => {
     try {
       const fetchProperties = async () => {
@@ -39,7 +38,7 @@ function PropertiesList({ apiUrl, filter }) {
     } catch (e) {
       console.log(e);
     }
-  }, [properties, apiUrl]);
+  }, [apiUrl]);
 
   return (
     <div className="d-flex justify-content-center flex-wrap">

@@ -1,6 +1,6 @@
 import { Button, Container, Nav, Navbar } from "react-bootstrap";
-// import AddProperties from "../Properties/AddProperties";
 import { Link } from "react-router-dom";
+
 
 function NavigationBar({isAdmin, showLogin, setShowLogin, apiUrl}) {
     function handleClick() {
@@ -17,7 +17,6 @@ function NavigationBar({isAdmin, showLogin, setShowLogin, apiUrl}) {
               <Link className='nav-link' to="/">Home</Link>
               <Link className='nav-link' to="/Contato">Contato</Link>
               {isAdmin && <Link className='nav-link' to='/register'>Cadastrar imóvel</Link>}
-              {/* {isAdmin && <AddProperties apiUrl={apiUrl} />} */}
             </Nav>
             <Button onClick={handleClick} as="input" type="button" value="Logar" />
           </Navbar.Collapse>

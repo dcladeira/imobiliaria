@@ -15,12 +15,14 @@ import axios from "axios";
 function AddProperties({ apiUrl }) {
   const [show, setShow] = useState(true);
   const handleClose = () => setShow(false);
-  // const handleShow = () => setShow(true);
 
   const [showToastSuccess, setShowToastSuccess] = useState(false);
-  const [showToastDanger, setShowToastDanger] = useState(false);
+  const [showToastFail, setShowToastFail] = useState(false);
+  const [showToastIncomplete, setShowToastIncomplete] = useState(false);
   const toggleShowToastSuccess = () => setShowToastSuccess(!showToastSuccess);
-  const toggleShowToastDanger = () => setShowToastDanger(!showToastDanger);
+  const toggleShowToastFail = () => setShowToastFail(!showToastFail);
+  const handleShowToastIncomplete = () => setShowToastIncomplete(true);
+  const handleCloseToastIncomplete = () => setShowToastIncomplete(false);
 
   const navigate = useNavigate();
   const types = ["Casa", "Apartamento", "Terreno"];
@@ -49,7 +51,6 @@ function AddProperties({ apiUrl }) {
   });
 
   const handleChange = (e) => {
-    console.log(document.getElementById("photosUrl"));
     if (e.target.name.slice(0, 8) === "checkbox") {
       const { amenities } = body;
       amenities[e.target.name.slice(9)] = e.target.checked;
@@ -66,46 +67,52 @@ function AddProperties({ apiUrl }) {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post(apiUrl, body);
-      toggleShowToastSuccess();
-      setTimeout(() => {
-        toggleShowToastSuccess();
-        setBody({
-          code: "",
-          title: "",
-          description: "",
-          type: "",
-          transaction: "",
-          state: "",
-          city: "",
-          neighborhood: "",
-          address: "",
-          area: 0,
-          bedrooms: 0,
-          bathrooms: 0,
-          price: 0,
-          amenities: {
-            swimming: false,
-            concierge: false,
-            gourmet: false,
-            parking: false,
-          },
-          photos: [""],
-        });
-        handleClose();
-        navigate("/");
-      }, 2000);
-    } catch (error) {
-      console.log(error);
-      toggleShowToastDanger();
-      setTimeout(() => {
-        toggleShowToastDanger();
-        handleClose();
-        navigate("/");
-      }, 2000);
-    }
+      e.preventDefault();
+      if (body.transaction === "" || body.type === "" || body.state === "" || body.city === "") {
+        handleShowToastIncomplete();
+        setTimeout(() => handleCloseToastIncomplete(), 1500);
+      } else {
+        try {
+          await axios.post(apiUrl, body);
+          toggleShowToastSuccess();
+          setTimeout(() => {
+            toggleShowToastSuccess();
+            setBody({
+              code: "",
+              title: "",
+              description: "",
+              type: "",
+              transaction: "",
+              state: "",
+              city: "",
+              neighborhood: "",
+              address: "",
+              area: 0,
+              bedrooms: 0,
+              bathrooms: 0,
+              price: 0,
+              amenities: {
+                swimming: false,
+                concierge: false,
+                gourmet: false,
+                parking: false,
+              },
+              photos: [""],
+            });
+            handleClose();
+            navigate("/");
+          }, 1500);
+        } catch (error) {
+          console.log(error);
+          toggleShowToastFail();
+          setTimeout(() => {
+            toggleShowToastFail();
+            handleClose();
+            navigate("/");
+          }, 1500);
+        }
+      }
+
   };
 
   const addPhoto = () => {
@@ -114,11 +121,11 @@ function AddProperties({ apiUrl }) {
     setBody({...body});
   }
 
-  const delPhoto = (i) => {
-    // let {photos} = body;
-    // photos.filter((a, b) => b !== i);
-    // setBody({...body});
-  }
+  // const delPhoto = (i) => {
+  //   let {photos} = body;
+  //   photos.filter((a, b) => b !== i);
+  //   setBody({...body});
+  // }
 
   return (
     <div>
@@ -132,7 +139,7 @@ function AddProperties({ apiUrl }) {
         <Modal.Header closeButton>
           <Modal.Title>Cadastrar imóvel</Modal.Title>
         </Modal.Header>
-        <ToastContainer position="top-center">
+        <ToastContainer position="middle-center">
           <Toast
             bg="success"
             show={showToastSuccess}
@@ -144,17 +151,31 @@ function AddProperties({ apiUrl }) {
             <Toast.Body>Imóvel cadastrado com sucesso!</Toast.Body>
           </Toast>
         </ToastContainer>
-        <ToastContainer position="top-center">
+        <ToastContainer position="middle-center">
           <Toast
             bg="danger"
-            show={showToastDanger}
-            onClose={toggleShowToastDanger}
+            show={showToastFail}
+            onClose={toggleShowToastFail}
           >
             <Toast.Header>
               <strong className="me-auto">Iron House</strong>
             </Toast.Header>
             <Toast.Body>
               Não foi possível cadastrar neste momento, tente mais tarde.
+            </Toast.Body>
+          </Toast>
+        </ToastContainer>
+        <ToastContainer position="middle-center">
+          <Toast
+            bg="warning"
+            show={showToastIncomplete}
+            onClose={handleCloseToastIncomplete}
+          >
+            <Toast.Header>
+              <strong className="me-auto">Iron House</strong>
+            </Toast.Header>
+            <Toast.Body>
+              Preencha os campos obrigatórios.
             </Toast.Body>
           </Toast>
         </ToastContainer>
@@ -197,7 +218,7 @@ function AddProperties({ apiUrl }) {
             <Form.Group className="mb-3">
               <Row>
                 <Col>
-                  <Form.Label>Tipo</Form.Label>
+                  <Form.Label>Tipo<span style={{color:"red"}}> *</span></Form.Label>
                   <Form.Select name="type" onChange={handleChange}>
                     <option value="0">Selecione uma opção</option>
                     {types.map((t) => {
@@ -206,7 +227,7 @@ function AddProperties({ apiUrl }) {
                   </Form.Select>
                 </Col>
                 <Col>
-                  <Form.Label>Transação</Form.Label>
+                  <Form.Label>Transação<span style={{color:"red"}}> *</span></Form.Label>
                   <Form.Select name="transaction" onChange={handleChange}>
                     <option value="0">Selecione uma opção</option>
                     {transactions.map((t) => {
@@ -217,7 +238,7 @@ function AddProperties({ apiUrl }) {
               </Row>
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Localização</Form.Label>
+              <Form.Label>Localização<span style={{color:"red"}}> *</span></Form.Label>
               <Row className="mb-2">
                 <Col xs="2">
                   <Form.Control
@@ -289,7 +310,7 @@ function AddProperties({ apiUrl }) {
                   />
                 </Col>
                 <Col>
-                  <Form.Label>Preço</Form.Label>
+                  <Form.Label>Valor</Form.Label>
                   <Form.Control
                     type="number"
                     name="price"
@@ -359,6 +380,7 @@ function AddProperties({ apiUrl }) {
                   <Button onClick={addPhoto}>+</Button>
                 </Col>
               </Row>
+            <p style={{color:"red"}}>* Campos obrigatórios: tipo, transação, UF, cidade.</p>
             </Form.Group>
             <Button
               variant="secondary"

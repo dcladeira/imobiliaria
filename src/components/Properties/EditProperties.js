@@ -18,9 +18,12 @@ function EditProperties({ id, apiUrl, body, setBody }) {
   const handleShow = () => setShow(true);
 
   const [showToastSuccess, setShowToastSuccess] = useState(false);
-  const [showToastDanger, setShowToastDanger] = useState(false);
+  const [showToastFail, setShowToastFail] = useState(false);
+  const [showToastIncomplete, setShowToastIncomplete] = useState(false);
   const toggleShowToastSuccess = () => setShowToastSuccess(!showToastSuccess);
-  const toggleShowToastDanger = () => setShowToastDanger(!showToastDanger);
+  const toggleShowToastFail = () => setShowToastFail(!showToastFail);
+  const handleShowToastIncomplete = () => setShowToastIncomplete(true);
+  const handleCloseToastIncomplete = () => setShowToastIncomplete(false);
 
   const navigate = useNavigate();
   const types = ["Casa", "Apartamento", "Terreno"];
@@ -56,25 +59,30 @@ function EditProperties({ id, apiUrl, body, setBody }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const clone = { ...body };
-      const id = clone._id;
-      delete clone._id;
-      await axios.put(`${apiUrl}/${id}`, clone);
-      toggleShowToastSuccess();
-      setTimeout(() => {
+    if (body.transaction === "" || body.type === "" || body.state === "" || body.city === "") {
+      handleShowToastIncomplete();
+      setTimeout(() => handleCloseToastIncomplete(), 1500);
+    } else {
+      try {
+        const clone = { ...body };
+        const id = clone._id;
+        delete clone._id;
+        await axios.put(`${apiUrl}/${id}`, clone);
         toggleShowToastSuccess();
-        handleClose();
-        navigate("/");
-      }, 2000);
-    } catch (error) {
-      console.log(error);
-      toggleShowToastDanger();
-      setTimeout(() => {
-        toggleShowToastDanger();
-        handleClose();
-        navigate("/");
-      }, 2000);
+        setTimeout(() => {
+          toggleShowToastSuccess();
+          handleClose();
+          navigate("/");
+        }, 2000);
+      } catch (error) {
+        console.log(error);
+        toggleShowToastFail();
+        setTimeout(() => {
+          toggleShowToastFail();
+          handleClose();
+          navigate("/");
+        }, 2000);
+      }
     }
   };
 
@@ -94,7 +102,7 @@ function EditProperties({ id, apiUrl, body, setBody }) {
         <Modal.Header closeButton>
           <Modal.Title>Edição do imóvel</Modal.Title>
         </Modal.Header>
-        <ToastContainer position="top-center">
+        <ToastContainer position="middle-center">
           <Toast
             bg="success"
             show={showToastSuccess}
@@ -106,17 +114,31 @@ function EditProperties({ id, apiUrl, body, setBody }) {
             <Toast.Body>Imóvel alterado com sucesso!</Toast.Body>
           </Toast>
         </ToastContainer>
-        <ToastContainer position="top-center">
+        <ToastContainer position="middle-center">
           <Toast
             bg="danger"
-            show={showToastDanger}
-            onClose={toggleShowToastDanger}
+            show={showToastFail}
+            onClose={toggleShowToastFail}
           >
             <Toast.Header>
               <strong className="me-auto">Iron House</strong>
             </Toast.Header>
             <Toast.Body>
               Não foi possível alterar neste momento, tente mais tarde.
+            </Toast.Body>
+          </Toast>
+        </ToastContainer>
+        <ToastContainer position="middle-center">
+          <Toast
+            bg="warning"
+            show={showToastIncomplete}
+            onClose={handleCloseToastIncomplete}
+          >
+            <Toast.Header>
+              <strong className="me-auto">Iron House</strong>
+            </Toast.Header>
+            <Toast.Body>
+              Preencha os campos obrigatórios.
             </Toast.Body>
           </Toast>
         </ToastContainer>
@@ -159,7 +181,7 @@ function EditProperties({ id, apiUrl, body, setBody }) {
             <Form.Group className="mb-3">
               <Row>
                 <Col>
-                  <Form.Label>Tipo</Form.Label>
+                  <Form.Label>Tipo<span style={{color:"red"}}> *</span></Form.Label>
                   <Form.Select name="type" onChange={handleChange}>
                     <option value={body.type}>{body.type}</option>
                     {types
@@ -170,7 +192,7 @@ function EditProperties({ id, apiUrl, body, setBody }) {
                   </Form.Select>
                 </Col>
                 <Col>
-                  <Form.Label>Transação</Form.Label>
+                  <Form.Label>Transação<span style={{color:"red"}}> *</span></Form.Label>
                   <Form.Select name="transaction" onChange={handleChange}>
                     <option value={body.transaction}>{body.transaction}</option>
                     {transactions
@@ -183,7 +205,7 @@ function EditProperties({ id, apiUrl, body, setBody }) {
               </Row>
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Localização</Form.Label>
+              <Form.Label>Localização<span style={{color:"red"}}> *</span></Form.Label>
               <Row className="mb-2">
                 <Col xs="2">
                   <Form.Control
@@ -237,7 +259,7 @@ function EditProperties({ id, apiUrl, body, setBody }) {
                   />
                 </Col>
                 <Col>
-                  <Form.Label>Quartos</Form.Label>
+                  <Form.Label>Quartos<span style={{color:"red"}}> *</span></Form.Label>
                   <Form.Control
                     type="number"
                     name="bedrooms"
@@ -246,7 +268,7 @@ function EditProperties({ id, apiUrl, body, setBody }) {
                   />
                 </Col>
                 <Col>
-                  <Form.Label>Banheiros</Form.Label>
+                  <Form.Label>Banheiros<span style={{color:"red"}}> *</span></Form.Label>
                   <Form.Control
                     type="number"
                     name="bathrooms"
@@ -255,7 +277,7 @@ function EditProperties({ id, apiUrl, body, setBody }) {
                   />
                 </Col>
                 <Col>
-                  <Form.Label>Preço</Form.Label>
+                  <Form.Label>Valor<span style={{color:"red"}}> *</span></Form.Label>
                   <Form.Control
                     type="number"
                     name="price"
@@ -325,6 +347,7 @@ function EditProperties({ id, apiUrl, body, setBody }) {
                   <Button onClick={addPhoto}>+</Button>
                 </Col>
               </Row>
+              <p style={{color:"red"}}>* Campos obrigatórios</p>
             </Form.Group>
             <Button variant="secondary" onClick={handleClose}>
               Cancelar
