@@ -65,7 +65,8 @@
 }
 
 #price {
-    font-size: 5rem;
+    font-size: 3.5rem;
+    font-weight: 600;
 }
 
 .photos {
