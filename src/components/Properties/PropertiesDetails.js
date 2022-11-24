@@ -88,7 +88,7 @@ function PropertiesDetails({ isAdmin, apiUrl }) {
           <Toast.Header>
             <strong className="me-auto">Iron House</strong>
           </Toast.Header>
-          <Toast.Body>Imóvel excluído com sucesso!</Toast.Body>
+          <Toast.Body className="text-white">Imóvel excluído com sucesso!</Toast.Body>
         </Toast>
       </ToastContainer>
       <ToastContainer position="middle-center">
@@ -100,7 +100,7 @@ function PropertiesDetails({ isAdmin, apiUrl }) {
           <Toast.Header>
             <strong className="me-auto">Iron House</strong>
           </Toast.Header>
-          <Toast.Body>
+          <Toast.Body className="text-white">
             Não foi possível excluir neste momento, tente mais tarde.
           </Toast.Body>
         </Toast>
