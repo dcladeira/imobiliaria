@@ -28,7 +28,6 @@ function PropertiesList({ apiUrl, filter }) {
     return false}
   })
 
-
   useEffect(() => {
     try {
       const fetchProperties = async () => {

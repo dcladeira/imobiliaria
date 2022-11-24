@@ -1,0 +1,55 @@
+.propertyDescription {
+    width: 50vw;
+    margin: 1vh 25vw;
+    background-color: rgb(194,202,216);
+    padding: 3vh 2vw;
+    border-radius: 1vw;
+}
+
+.propertyDescription > h1 {
+    font-size: 3rem;
+    font-weight: 600;
+    color: rgb(85,92,100);
+    text-decoration-line: none;
+}
+
+.propertyDescription > h2 {
+    font-size: 2rem;
+    color: rgb(85,92,100);
+}
+
+.propertyDescription > p {
+    font-size: 1.6rem;
+    color: rgb(85,92,100);
+}
+
+.features>span {
+    font-size: 1.6rem;
+    font-weight: 500;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 5px 10px 5px 0;
+    /* box-shadow: rgba(0, 0, 0, 0.3) 0px 7px 10px -3px, rgba(0, 0, 0, 0.2) 0px -3px 0px inset; */
+    color: black;
+    background-color: white;
+}
+
+#price {
+    font-size: 5rem;
+}
+
+.photos {
+    margin: 3vh 3vw;
+    width: 40vw;
+    height: auto;
+}
+
+.footerButtons {
+    margin: 0 3vw;
+    padding: 0 2vw;
+}
+
+.footerButtons Button {
+    font-size: 1.5rem;
+    font-weight: 500;
+}

@@ -4,9 +4,9 @@ import { Route, Routes } from "react-router-dom";
 import "./App.css";
 import LoginModal from "./components/Modal/LoginModal";
 import NavigationBar from "./components/NavigationBar/NavigationBar";
-// import AddProperties from "./components/Properties/AddProperties";
+import AddProperties from "./components/Properties/AddProperties";
 import HomePage from "./pages/HomePage";
-// import PropertiesDetails from "./components/Properties/PropertiesDetails";
+import PropertiesDetails from "./components/Properties/PropertiesDetails";
 
 function App() {
   const apiUrl = "https://ironrest.cyclic.app/properties/";
@@ -19,8 +19,8 @@ function App() {
       <LoginModal  showLogin={showLogin} setShowLogin={setShowLogin} isAdmin={isAdmin} setIsAdmin={setIsAdmin}/>
       <Routes>
         <Route path="/" element={<HomePage apiUrl={apiUrl}/>} />
-          {/* <Route path="/properties/:id" element={<PropertiesDetails isAdmin={isAdmin} apiUrl={apiUrl} />}/>
-          <Route path="/register" element={<AddProperties apiUrl={apiUrl} />}/> */}
+        <Route path="/properties/:id" element={<PropertiesDetails isAdmin={isAdmin} apiUrl={apiUrl} />}/>
+        <Route path="/register" element={<AddProperties apiUrl={apiUrl}/>}/>
       </Routes>
     </div>
   );
