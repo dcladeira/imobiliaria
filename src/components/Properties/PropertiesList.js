@@ -39,7 +39,7 @@ function PropertiesList({ apiUrl, filter }) {
     } catch (e) {
       console.log(e);
     }
-  }, [properties, apiUrl]);
+  }, [apiUrl]);
 
   return (
     <div className="d-flex justify-content-center flex-wrap">
@@ -48,8 +48,11 @@ function PropertiesList({ apiUrl, filter }) {
            <Link key={property._id} className="nav-link" to={`/properties/${property._id}`}>
           <Card className="shadow p-3 mb-5 bg-body rounded" style={{ width: "22rem" }}>
           <Card.Body className="d-flex justify-content-between">
-              <Card.Title>{property.transaction}</Card.Title>
-              <Card.Text>{property.price}</Card.Text>
+              <Card.Title>
+              {property.transaction.toLowerCase() === 'venda' && <p className="sell-tag">{property.transaction}</p>}
+              {property.transaction.toLowerCase() === 'aluguel' && <p className="rent-tag">{property.transaction}</p>}
+              </Card.Title>
+              <Card.Text>{(+property.price).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</Card.Text>
             </Card.Body>
             <Card.Img variant="top" src={property.photos[0]} />
             <Card.Body>

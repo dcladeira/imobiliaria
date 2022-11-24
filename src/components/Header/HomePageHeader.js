@@ -215,7 +215,7 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
 
             {/* FILTRO DE QUARTOS */}
             <Col className="d-flex flex-column align-items-center">
-              <Form.Label className="d-flex align-items-center"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bed" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" className="svg-inline--fa fa-bed fa-w-20" data-v-832c9870="" data-v-45ef37c4=""><path fill="currentColor" d="M176 256c44.11 0 80-35.89 80-80s-35.89-80-80-80-80 35.89-80 80 35.89 80 80 80zm352-128H304c-8.84 0-16 7.16-16 16v144H64V80c0-8.84-7.16-16-16-16H16C7.16 64 0 71.16 0 80v352c0 8.84 7.16 16 16 16h32c8.84 0 16-7.16 16-16v-48h512v48c0 8.84 7.16 16 16 16h32c8.84 0 16-7.16 16-16V240c0-61.86-50.14-112-112-112z" data-v-832c9870="" data-v-45ef37c4="" class=""></path></svg>N° de quartos</Form.Label>
+              <Form.Label className="d-flex align-items-center"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="bed" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" className="svg-inline--fa fa-bed fa-w-20" data-v-832c9870="" data-v-45ef37c4=""><path fill="currentColor" d="M176 256c44.11 0 80-35.89 80-80s-35.89-80-80-80-80 35.89-80 80 35.89 80 80 80zm352-128H304c-8.84 0-16 7.16-16 16v144H64V80c0-8.84-7.16-16-16-16H16C7.16 64 0 71.16 0 80v352c0 8.84 7.16 16 16 16h32c8.84 0 16-7.16 16-16v-48h512v48c0 8.84 7.16 16 16 16h32c8.84 0 16-7.16 16-16V240c0-61.86-50.14-112-112-112z" data-v-832c9870="" data-v-45ef37c4="" className=""></path></svg>N° de quartos</Form.Label>
               <ButtonGroup className="">
                 <ToggleButton
                   type="radio"
@@ -348,7 +348,7 @@ function HomePageHeader({ apiUrl, filter, setFilter }) {
                 type="switch"
                 id="concierge"
                 name="concierge"
-                label="Concierge"
+                label="Portaria"
                 checked={filter.amenities.concierge}
                 onChange={handleChange}
               />
