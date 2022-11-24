@@ -1,12 +1,29 @@
 import { useNavigate } from "react-router-dom";
-import { Button, Modal, Form, Row, Col, Stack } from "react-bootstrap";
+import {
+  Button,
+  Modal,
+  Form,
+  Row,
+  Col,
+  Stack,
+  Toast,
+  ToastContainer,
+} from "react-bootstrap";
 import { useState } from "react";
 import axios from "axios";
 
 function AddProperties({ apiUrl }) {
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
   const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+
+  const [showToastSuccess, setShowToastSuccess] = useState(false);
+  const [showToastFail, setShowToastFail] = useState(false);
+  const [showToastIncomplete, setShowToastIncomplete] = useState(false);
+  const toggleShowToastSuccess = () => setShowToastSuccess(!showToastSuccess);
+  const toggleShowToastFail = () => setShowToastFail(!showToastFail);
+  const handleShowToastIncomplete = () => setShowToastIncomplete(true);
+  const handleCloseToastIncomplete = () => setShowToastIncomplete(false);
+
   const navigate = useNavigate();
   const types = ["Casa", "Apartamento", "Terreno"];
   const transactions = ["Venda", "Aluguel"];
@@ -30,7 +47,7 @@ function AddProperties({ apiUrl }) {
       gourmet: false,
       parking: false,
     },
-    photos: [],
+    photos: [""],
   });
 
   const handleChange = (e) => {
@@ -38,36 +55,130 @@ function AddProperties({ apiUrl }) {
       const { amenities } = body;
       amenities[e.target.name.slice(9)] = e.target.checked;
       setBody({ ...body });
-    } else if (e.target.name.slice(0,5) === "photo") {
-        const {photos} = body;
-        photos[Number(e.target.name.slice(-1))] = e.target.value;
-        setBody({ ...body });
-    } else {
-        setBody({ ...body, [e.target.name]: e.target.value });
+    }
+    else if (e.target.name.slice(0, 5) === "photo") {
+      const { photos } = body;
+      photos[Number(e.target.name.slice(-1))] = e.target.value;
+      setBody({ ...body });
+    }
+    else {
+      setBody({ ...body, [e.target.name]: e.target.value });
     }
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    try {
-      await axios.post(apiUrl, body);
-      handleClose();
-      navigate("/");
-    } catch (error) {
-      console.log(error);
-    }
+      e.preventDefault();
+      if (body.transaction === "" || body.type === "" || body.state === "" || body.city === "") {
+        handleShowToastIncomplete();
+        setTimeout(() => handleCloseToastIncomplete(), 1500);
+      } else {
+        try {
+          await axios.post(apiUrl, body);
+          toggleShowToastSuccess();
+          setTimeout(() => {
+            toggleShowToastSuccess();
+            setBody({
+              code: "",
+              title: "",
+              description: "",
+              type: "",
+              transaction: "",
+              state: "",
+              city: "",
+              neighborhood: "",
+              address: "",
+              area: 0,
+              bedrooms: 0,
+              bathrooms: 0,
+              price: 0,
+              amenities: {
+                swimming: false,
+                concierge: false,
+                gourmet: false,
+                parking: false,
+              },
+              photos: [""],
+            });
+            handleClose();
+            navigate("/");
+          }, 1500);
+        } catch (error) {
+          console.log(error);
+          toggleShowToastFail();
+          setTimeout(() => {
+            toggleShowToastFail();
+            handleClose();
+            navigate("/");
+          }, 1500);
+        }
+      }
+
   };
+
+  const addPhoto = () => {
+    const {photos} = body;
+    photos.push("");
+    setBody({...body});
+  }
+
+  // const delPhoto = (i) => {
+  //   let {photos} = body;
+  //   photos.filter((a, b) => b !== i);
+  //   setBody({...body});
+  // }
 
   return (
     <div>
-      <Button variant="ligth" onClick={handleShow}>
-        Cadastrar imóvel
-      </Button>
-
-      <Modal key={body._id} show={show} onHide={handleClose}>
+      <Modal
+        key={body._id}
+        show={show}
+        onHide={() => {
+          navigate(-1);
+        }}
+      >
         <Modal.Header closeButton>
           <Modal.Title>Cadastrar imóvel</Modal.Title>
         </Modal.Header>
+        <ToastContainer position="middle-center">
+          <Toast
+            bg="success"
+            show={showToastSuccess}
+            onClose={toggleShowToastSuccess}
+          >
+            <Toast.Header>
+              <strong className="me-auto">Iron House</strong>
+            </Toast.Header>
+            <Toast.Body>Imóvel cadastrado com sucesso!</Toast.Body>
+          </Toast>
+        </ToastContainer>
+        <ToastContainer position="middle-center">
+          <Toast
+            bg="danger"
+            show={showToastFail}
+            onClose={toggleShowToastFail}
+          >
+            <Toast.Header>
+              <strong className="me-auto">Iron House</strong>
+            </Toast.Header>
+            <Toast.Body>
+              Não foi possível cadastrar neste momento, tente mais tarde.
+            </Toast.Body>
+          </Toast>
+        </ToastContainer>
+        <ToastContainer position="middle-center">
+          <Toast
+            bg="warning"
+            show={showToastIncomplete}
+            onClose={handleCloseToastIncomplete}
+          >
+            <Toast.Header>
+              <strong className="me-auto">Iron House</strong>
+            </Toast.Header>
+            <Toast.Body>
+              Preencha os campos obrigatórios.
+            </Toast.Body>
+          </Toast>
+        </ToastContainer>
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
@@ -107,27 +218,27 @@ function AddProperties({ apiUrl }) {
             <Form.Group className="mb-3">
               <Row>
                 <Col>
-                  <Form.Label>Tipo</Form.Label>
+                  <Form.Label>Tipo<span style={{color:"red"}}> *</span></Form.Label>
                   <Form.Select name="type" onChange={handleChange}>
-                    {types
-                      .map((t) => {
-                        return <option value={t}>{t}</option>;
-                      })}
+                    <option value="0">Selecione uma opção</option>
+                    {types.map((t) => {
+                      return <option value={t}>{t}</option>;
+                    })}
                   </Form.Select>
                 </Col>
                 <Col>
-                  <Form.Label>Transação</Form.Label>
+                  <Form.Label>Transação<span style={{color:"red"}}> *</span></Form.Label>
                   <Form.Select name="transaction" onChange={handleChange}>
-                    {transactions
-                      .map((t) => {
-                        return <option value={t}>{t}</option>;
-                      })}
+                    <option value="0">Selecione uma opção</option>
+                    {transactions.map((t) => {
+                      return <option value={t}>{t}</option>;
+                    })}
                   </Form.Select>
                 </Col>
               </Row>
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label>Localização</Form.Label>
+              <Form.Label>Localização<span style={{color:"red"}}> *</span></Form.Label>
               <Row className="mb-2">
                 <Col xs="2">
                   <Form.Control
@@ -173,7 +284,12 @@ function AddProperties({ apiUrl }) {
               <Row>
                 <Col>
                   <Form.Label>Área</Form.Label>
-                  <Form.Control type="number" name="area" value={body.area} onChange={handleChange}/>
+                  <Form.Control
+                    type="number"
+                    name="area"
+                    value={body.area}
+                    onChange={handleChange}
+                  />
                 </Col>
                 <Col>
                   <Form.Label>Quartos</Form.Label>
@@ -194,8 +310,13 @@ function AddProperties({ apiUrl }) {
                   />
                 </Col>
                 <Col>
-                  <Form.Label>Preço</Form.Label>
-                  <Form.Control type="number" name="price" value={body.price} onChange={handleChange}/>
+                  <Form.Label>Valor</Form.Label>
+                  <Form.Control
+                    type="number"
+                    name="price"
+                    value={body.price}
+                    onChange={handleChange}
+                  />
                 </Col>
               </Row>
             </Form.Group>
@@ -232,34 +353,46 @@ function AddProperties({ apiUrl }) {
                 />
               </Stack>
             </Form.Group>
-            <Form.Group className="mb-3">
+            <Form.Group className="mb-3" id="photosUrl" onChange={handleChange}>
               <Form.Label>URL da fotos</Form.Label>
-              <Form.Control
-              className="mb-2"
-                type="text"
-                placeholder="Insira a URL da foto"
-                name="photo-0"
-                value={body.photos[0]}
-                onChange={handleChange}
-              />
-              <Form.Control
-              className="mb-2"
-                type="text"
-                placeholder="Insira a URL da foto"
-                name="photo-1"
-                value={body.photos[1]}
-                onChange={handleChange}
-              />
-              <Form.Control
-                type="text"
-                placeholder="Insira a URL da foto"
-                name="photo-2"
-                value={body.photos[2]}
-                onChange={handleChange}
-              />
+              {body.photos.map((photo, index) => {
+                return (
+                  <Row>
+                    <Col>
+                      <Form.Control
+                        className="mb-2 photoUrl"
+                        type="text"
+                        placeholder="Insira a URL da foto"
+                        name={"photo-"+index}
+                        value={photo}
+                        onChange={handleChange}
+                      />
+                    </Col>
+                    {/* <Col xs="1">
+                      <Button variant="danger" onClick={delPhoto(index)}>-</Button>
+                    </Col> */}
+                  </Row>
+                );
+              })}
+              <Row>
+                <Col></Col>
+                <Col>
+                  <Button onClick={addPhoto}>+</Button>
+                </Col>
+              </Row>
+            <p style={{color:"red"}}>* Campos obrigatórios: tipo, transação, UF, cidade.</p>
             </Form.Group>
-          <Button variant="secondary" onClick={handleClose}>Cancelar</Button>
-          <Button variant="primary" type="submit">Salvar</Button>
+            <Button
+              variant="secondary"
+              onClick={() => {
+                navigate(-1);
+              }}
+            >
+              Cancelar
+            </Button>
+            <Button variant="primary" type="submit">
+              Salvar imóvel
+            </Button>
           </Form>
         </Modal.Body>
       </Modal>

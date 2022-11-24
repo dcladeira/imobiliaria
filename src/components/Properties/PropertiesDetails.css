@@ -1,14 +1,26 @@
 .propertyDescription {
     width: 50vw;
     margin: 1vh 25vw;
-    background-color: rgb(11,13,59);
+    background-color: rgb(194,202,216);
     padding: 3vh 2vw;
-    border-radius: 2vw;
-    color: white;
+    border-radius: 1vw;
+}
+
+.propertyDescription > h1 {
+    font-size: 3rem;
+    font-weight: 600;
+    color: rgb(85,92,100);
+    text-decoration-line: none;
+}
+
+.propertyDescription > h2 {
+    font-size: 2rem;
+    color: rgb(85,92,100);
 }
 
 .propertyDescription > p {
-    font-size: 2rem;
+    font-size: 1.6rem;
+    color: rgb(85,92,100);
 }
 
 .features>span {
@@ -29,6 +41,7 @@
 .photos {
     margin: 3vh 3vw;
     width: 40vw;
+    height: auto;
 }
 
 .footerButtons {

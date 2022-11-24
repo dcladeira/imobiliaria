@@ -1,12 +1,21 @@
 import { useNavigate } from "react-router-dom";
-import { Button, Carousel, Badge, Row, Col, Container } from "react-bootstrap";
+import {
+  Button,
+  Carousel,
+  Badge,
+  Row,
+  Col,
+  Container,
+  ToastContainer,
+  Toast,
+} from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./PropertiesDetails.css";
 import EditProperties from "./EditProperties";
-import axios from 'axios';
+import axios from "axios";
 
-function PropertiesDetails({ isAdmin, apiUrl}) {
+function PropertiesDetails({ isAdmin, apiUrl }) {
   const { id } = useParams();
   const navigate = useNavigate();
   const [body, setBody] = useState({
@@ -33,6 +42,11 @@ function PropertiesDetails({ isAdmin, apiUrl}) {
   });
   const [property, setProperty] = useState(body);
 
+  const [showToastSuccess, setShowToastSuccess] = useState(false);
+  const [showToastDanger, setShowToastDanger] = useState(false);
+  const toggleShowToastSuccess = () => setShowToastSuccess(!showToastSuccess);
+  const toggleShowToastDanger = () => setShowToastDanger(!showToastDanger);
+
   useEffect(() => {
     try {
       const fetchProperty = async () => {
@@ -46,13 +60,52 @@ function PropertiesDetails({ isAdmin, apiUrl}) {
   }, [apiUrl, id]);
 
   const deleteProperty = async (id) => {
-    await axios.delete(`${apiUrl}/${id}`);
-    navigate("/");
-  }
+    try {
+      await axios.delete(`${apiUrl}/${id}`);
+      toggleShowToastSuccess();
+      setTimeout(() => {
+        toggleShowToastSuccess();
+        navigate("/");
+      }, 1500);
+    } catch (error) {
+      console.log(error);
+      toggleShowToastDanger();
+      setTimeout(() => {
+        toggleShowToastDanger();
+        navigate("/");
+      }, 1500);
+    }
+  };
 
   return (
     <Container key="property._id" className="propertyDescription">
-      <h1>{property.title}</h1>
+      <ToastContainer position="middle-center">
+        <Toast
+          bg="success"
+          show={showToastSuccess}
+          onClose={toggleShowToastSuccess}
+        >
+          <Toast.Header>
+            <strong className="me-auto">Iron House</strong>
+          </Toast.Header>
+          <Toast.Body>Imóvel excluído com sucesso!</Toast.Body>
+        </Toast>
+      </ToastContainer>
+      <ToastContainer position="middle-center">
+        <Toast
+          bg="danger"
+          show={showToastDanger}
+          onClose={toggleShowToastDanger}
+        >
+          <Toast.Header>
+            <strong className="me-auto">Iron House</strong>
+          </Toast.Header>
+          <Toast.Body>
+            Não foi possível excluir neste momento, tente mais tarde.
+          </Toast.Body>
+        </Toast>
+      </ToastContainer>
+      <h1 className='mb-4'>{property.title}</h1>
       <p>
         <Badge bg="info">{property.transaction}</Badge>{" "}
         <Badge bg="info">{property.type}</Badge>{" "}
@@ -64,7 +117,7 @@ function PropertiesDetails({ isAdmin, apiUrl}) {
         <span>{property.bedrooms} quartos</span>
         <span>{property.bathrooms} banheiros</span>
       </p>
-      <p id="price">R${property.price}</p>
+      <p id="price">{property.price.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}</p>
       <h2>Descrição:</h2>
       <p>{property.description}</p>
       <h2>Comodidades:</h2>
@@ -106,12 +159,25 @@ function PropertiesDetails({ isAdmin, apiUrl}) {
 
       <Row className="footerButtons">
         <Col>
-          {isAdmin && <Button variant="danger" onClick={()=>deleteProperty(property._id)}>
-            Excluir imóvel
-          </Button>}
+          {isAdmin && (
+            <Button
+              variant="danger"
+              onClick={() => deleteProperty(property._id)}
+            >
+              Excluir imóvel
+            </Button>
+          )}
         </Col>
         <Col>
-          {isAdmin && <EditProperties id={id} apiUrl={apiUrl} body={body} setBody={setBody} property={property} />}
+          {isAdmin && (
+            <EditProperties
+              id={id}
+              apiUrl={apiUrl}
+              body={body}
+              setBody={setBody}
+              property={property}
+            />
+          )}
         </Col>
         <Col>
           <Button variant="secondary" onClick={() => navigate(-1)}>
