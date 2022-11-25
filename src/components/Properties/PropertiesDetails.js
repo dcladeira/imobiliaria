@@ -159,7 +159,7 @@ function PropertiesDetails({ isAdmin, apiUrl }) {
               <img
                 className="d-block w-100 h-50"
                 src={photo}
-                alt="First slide"
+                alt="Property"
               />
             </Carousel.Item>
           );
