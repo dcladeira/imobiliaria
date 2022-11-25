@@ -102,46 +102,7 @@ function EditProperties({ id, apiUrl, body, setBody }) {
         <Modal.Header closeButton>
           <Modal.Title>Edição do imóvel</Modal.Title>
         </Modal.Header>
-        <ToastContainer position="middle-center">
-          <Toast
-            bg="success"
-            show={showToastSuccess}
-            onClose={toggleShowToastSuccess}
-          >
-            <Toast.Header>
-              <strong className="me-auto">Iron House</strong>
-            </Toast.Header>
-            <Toast.Body className="text-white">Imóvel alterado com sucesso!</Toast.Body>
-          </Toast>
-        </ToastContainer>
-        <ToastContainer position="middle-center">
-          <Toast
-            bg="danger"
-            show={showToastFail}
-            onClose={toggleShowToastFail}
-          >
-            <Toast.Header>
-              <strong className="me-auto">Iron House</strong>
-            </Toast.Header>
-            <Toast.Body className="text-white">
-              Não foi possível alterar neste momento, tente mais tarde.
-            </Toast.Body>
-          </Toast>
-        </ToastContainer>
-        <ToastContainer position="middle-center">
-          <Toast
-            bg="warning"
-            show={showToastIncomplete}
-            onClose={handleCloseToastIncomplete}
-          >
-            <Toast.Header>
-              <strong className="me-auto">Iron House</strong>
-            </Toast.Header>
-            <Toast.Body>
-              Preencha os campos obrigatórios.
-            </Toast.Body>
-          </Toast>
-        </ToastContainer>
+
         <Modal.Body>
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-3">
@@ -349,6 +310,46 @@ function EditProperties({ id, apiUrl, body, setBody }) {
               </Row>
               <p style={{color:"red"}}>* Campos obrigatórios</p>
             </Form.Group>
+            <ToastContainer position="middle-center">
+          <Toast
+            bg="success"
+            show={showToastSuccess}
+            onClose={toggleShowToastSuccess}
+          >
+            <Toast.Header>
+              <strong className="me-auto">Iron House</strong>
+            </Toast.Header>
+            <Toast.Body className="text-white">Imóvel alterado com sucesso!</Toast.Body>
+          </Toast>
+        </ToastContainer>
+        <ToastContainer position="middle-center">
+          <Toast
+            bg="danger"
+            show={showToastFail}
+            onClose={toggleShowToastFail}
+          >
+            <Toast.Header>
+              <strong className="me-auto">Iron House</strong>
+            </Toast.Header>
+            <Toast.Body className="text-white">
+              Não foi possível alterar neste momento, tente mais tarde.
+            </Toast.Body>
+          </Toast>
+        </ToastContainer>
+        <ToastContainer position="middle-center">
+          <Toast
+            bg="warning"
+            show={showToastIncomplete}
+            onClose={handleCloseToastIncomplete}
+          >
+            <Toast.Header>
+              <strong className="me-auto">Iron House</strong>
+            </Toast.Header>
+            <Toast.Body>
+              Preencha os campos obrigatórios.
+            </Toast.Body>
+          </Toast>
+        </ToastContainer>
             <Button variant="secondary" onClick={handleClose}>
               Cancelar
             </Button>
